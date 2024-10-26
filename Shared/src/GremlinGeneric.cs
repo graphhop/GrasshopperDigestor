@@ -14,6 +14,9 @@ namespace GraphHop.Shared
 
         GraphTraversal<Vertex, Vertex> Find(object node);
 
+        GraphTraversal<object, Vertex> FindAnonymous(object node);
+
+
         void Connect(object node1, object node2);
 
         bool Exists(object node);
@@ -37,7 +40,7 @@ namespace GraphHop.Shared
         public void Connect(object node1, object node2)
         {
             var n1 = Find(node1);
-            var n2 = Find(node2);
+            var n2 = FindAnonymous(node2);
             var targetType = node2.GetType();
 
             if (n1.HasNext() && n1.HasNext())
@@ -57,6 +60,22 @@ namespace GraphHop.Shared
         public bool ConnectionExists(object node1, object node2)
         {
             throw new NotImplementedException();
+        }
+
+        public GraphTraversal<object, Vertex> FindAnonymous(object node)
+        {
+            var nodeType = node.GetType();
+            var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+            var attType = typeof(IdAttribute);
+            var idField = fieldInfos.Where(field => field.IsDefined(attType, false)).FirstOrDefault();
+            if (idField == null)
+            {
+                throw new Exception("No IdAttribute found on node");
+            }
+
+            return __.V()
+                .HasLabel(nodeType.Name)
+                .Has(idField.Name, idField.GetValue(node));
         }
 
         public GraphTraversal<Vertex, Vertex> Find(object node)
