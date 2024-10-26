@@ -1,12 +1,7 @@
 ﻿using Rhino;
 using Rhino.Commands;
-using Rhino.Geometry;
-using Rhino.Input;
-using Rhino.Input.Custom;
-using System;
-using System.Collections.Generic;
 
-namespace PluginTemplate.PluginRhino
+namespace GraphHop.PluginRhino.Commands
 {
     public class ExampleCommand : Command
     {

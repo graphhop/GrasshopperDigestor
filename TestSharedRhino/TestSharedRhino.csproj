@@ -4,6 +4,7 @@
   
   <Import Project="../CommonSettings.csproj" />
   <Import Project="../CommonReferencesRhino.csproj" />
+  <Import Project="../CommonReferencesGrasshopper.csproj" />
   <Import Project="../CommonReferencesTests.csproj" />
   
   <PropertyGroup>

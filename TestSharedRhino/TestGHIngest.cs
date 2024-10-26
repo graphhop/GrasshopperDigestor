@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Rhino.Geometry;
@@ -10,15 +12,23 @@ namespace GraphHop.Tests.SharedRhino
     [TestClass]
     public class TestGHIngest
     {
-        GH_Document OpenGrasshopperDocument(string filename)
+        public static string GetPathRelativeToAssembly(string filename)
         {
+            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var directory = Path.GetDirectoryName(assemblyLocation);
+            return Path.Combine(directory ?? string.Empty, $"../../../Sample File/{filename}");
+        }
+        
+        GH_Document OpenGrasshopperDocument(string filename, out GH_DocumentIO io)
+        {
+            var fullFilePath = GetPathRelativeToAssembly(filename);
             // Load the Grasshopper document
-            var io = new GH_DocumentIO();
-            if (!io.Open(filename))
+            io = new GH_DocumentIO();
+            if (!io.Open(fullFilePath))
             {
                 return null;
             }
-
+            
             return io.Document;
         }
         
@@ -50,8 +60,9 @@ namespace GraphHop.Tests.SharedRhino
         [TestMethod]
         public void TestIngest()
         {
-            var testDoc = OpenGrasshopperDocument()
-            GraphHop.SharedRhino.Utilities.GHDigestUtility
+            var testFile = "Sample Grasshopper File/grasshopper-examples-master/gh/amoeba-curve-2d.ghx";
+            var testDoc = OpenGrasshopperDocument(testFile, out var io);
+            Assert.IsNotNull(testDoc);
         }
 
         /// <summary>
