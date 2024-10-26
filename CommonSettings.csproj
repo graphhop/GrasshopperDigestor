@@ -27,7 +27,7 @@
     <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.EndsWith('R8'))">
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
   </PropertyGroup>
   
   <!--
