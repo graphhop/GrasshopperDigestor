@@ -47,6 +47,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\SharedRhino\SharedRhino.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />
