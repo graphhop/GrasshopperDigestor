@@ -37,9 +37,9 @@ namespace GraphHop.Tests.Shared
 
             var gremlin = new GremlinConncetor();
 
-            gremlin.AddNode("TestNode", dummyData);
+            gremlin.AddNode("TestNode2", dummyData);
 
-            var query = gremlin.GetNode("TestNode");
+            var query = gremlin.GetNode("TestNode2");
             Assert.IsNotNull(query);
         }
     }

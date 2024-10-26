@@ -54,24 +54,19 @@ namespace GraphHop.Shared.src.Gremlin
 
         public Vertex GetNode(string label)
         {
-            var node = _gremlin.V().Has(label).ToList();
+            var allNodes = _gremlin.V();
+            var node = _gremlin.V().HasLabel(label).ToList();
             return node?.First();
         }
 
         public void AddNode(string label, IDictionary<string, object> properties)
         {
-            var tx = BeginTransaction(_gremlin);
-            var vertex = _gremlin.AddV(label).Property("name", "testName");
-            CommitTransaction(_gremlin, tx);
-            /*
+            var vertex = _gremlin.AddV(label).Iterate();
+
             foreach (var property in properties)
             {
-                var tx2 = BeginTransaction(_gremlin);
-                _gremlin.V().Property(property.Key, property.Value);
-                CommitTransaction(_gremlin, tx2);
-
-            }
-            */
+                _gremlin.V().HasLabel(label).Property(property.Key, property.Value).Iterate();
+            }         
         }
     }
 }
