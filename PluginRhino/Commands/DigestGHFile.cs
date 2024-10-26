@@ -68,7 +68,7 @@ namespace PluginTemplate.PluginRhino
                 return Result.Failure;
             }
 
-            GHDigest
+            GraphHop.SharedRhino.Utilities.GHDigestUtility.
 
             return Result.Success;
 #endif
