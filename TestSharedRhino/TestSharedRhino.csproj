@@ -8,7 +8,8 @@
   <Import Project="../CommonReferencesTests.csproj" />
   
   <PropertyGroup>
-    <RootNamespace>$(CommonNamespace).Tests.SharedRhino</RootNamespace>
+
+	  <RootNamespace>$(CommonNamespace).Tests.SharedRhino</RootNamespace>
     <AssemblyName>$(CommonName).Tests.SharedRhino</AssemblyName>
     <Description>Tests for shared functionality depending on Rhino</Description>
     <!--
