@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphHop.Shared.Data;
+using System;
 
 namespace GraphHop.SharedRhino.Data;
 
@@ -15,6 +16,7 @@ public struct PluginNode
     /// <summary>
     /// The plugin's unique ID.
     /// </summary>
+    [IdAttribute]
     public Guid Guid;
     
 }
