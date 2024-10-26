@@ -24,5 +24,23 @@ namespace GraphHop.Tests.Shared
             var query =  gremlin.GetTestObject();
             Assert.IsNotNull(query);
         }
+
+        /// <summary>
+        /// need to have local server up and running
+        /// </summary>
+        [TestMethod]
+        public void TestGremlinAddNode()
+        {
+            IDictionary<string, object> dummyData = new Dictionary<string, object>();
+            dummyData.Add("name", "test1");
+            dummyData.Add("guid", new Guid());
+
+            var gremlin = new GremlinConncetor();
+
+            gremlin.AddNode("TestNode", dummyData);
+
+            var query = gremlin.GetNode("TestNode");
+            Assert.IsNotNull(query);
+        }
     }
 }
