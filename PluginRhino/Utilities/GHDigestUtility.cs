@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Grasshopper.Rhinoceros.Display.Params.Param_ModelView;
-using System.Diagnostics;
 
 namespace PluginTemplate.PluginRhino.Utilities
 {
