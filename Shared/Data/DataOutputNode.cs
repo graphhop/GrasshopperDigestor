@@ -2,6 +2,9 @@
 
 namespace GraphHop.SharedRhino.Data;
 
+/// <summary>
+/// An output of an instance of a component.
+/// </summary>
 public struct DataOutputNode
 {
     /// <summary>

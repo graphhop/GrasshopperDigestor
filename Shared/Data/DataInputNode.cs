@@ -2,6 +2,9 @@
 
 namespace GraphHop.SharedRhino.Data;
 
+/// <summary>
+/// An input of an instance of a component.
+/// </summary>
 public struct DataInputNode
 {
     /// <summary>

@@ -2,6 +2,9 @@
 
 namespace GraphHop.SharedRhino.Data;
 
+/// <summary>
+/// The definition (aka an actual implementation) of a component. This is independent of Grasshopper documents.
+/// </summary>
 public struct ComponentDefinitionNode
 {
     /// <summary>

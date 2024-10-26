@@ -2,6 +2,9 @@
 
 namespace GraphHop.SharedRhino.Data;
 
+/// <summary>
+/// An instance of a component in a document.
+/// </summary>
 public struct ComponentInstanceNode
 {
     /// <summary>

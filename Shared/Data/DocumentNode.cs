@@ -2,6 +2,9 @@
 
 namespace GraphHop.SharedRhino.Data;
 
+/// <summary>
+/// A grasshopper document.
+/// </summary>
 public struct DocumentNode
 {
     /// <summary>

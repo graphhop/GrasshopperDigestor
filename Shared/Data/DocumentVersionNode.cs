@@ -2,6 +2,9 @@
 
 namespace GraphHop.SharedRhino.Data;
 
+/// <summary>
+/// A version of a grasshopper document.
+/// </summary>
 public struct DocumentVersionNode
 {
     public Guid VersionId;
