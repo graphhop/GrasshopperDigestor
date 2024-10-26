@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Gremlin.Net.Driver;
 using Gremlin.Net.Driver.Remote;
 using Gremlin.Net.Process.Traversal;
@@ -19,7 +21,7 @@ namespace GraphHop.Shared.src.Gremlin
             var driverRemoteConnection = new DriverRemoteConnection(gremlinClient, "g");
             _gremlin = AnonymousTraversalSource.Traversal().WithRemote(driverRemoteConnection);
 
-           // _gremlin = AnonymousTraversalSource.Traversal().WithRemote(new DriverRemoteConnection("localhost", 8182));
+            // _gremlin = AnonymousTraversalSource.Traversal().WithRemote(new DriverRemoteConnection("localhost", 8182));
         }
 
         // Call this everytime we begin adding or reading
@@ -41,6 +43,7 @@ namespace GraphHop.Shared.src.Gremlin
                 var v1 = tx.AddV("person").Property("name", "marko").Next();
                 var v2 = tx.AddV("person").Property("name", "stephen").Next();
             CommitTransaction(_gremlin, tx);
+    
         }
         public IEnumerable<Vertex> GetTestObject()
         {
@@ -48,14 +51,23 @@ namespace GraphHop.Shared.src.Gremlin
             return _gremlin.V().Has("person", "name", "marko").Out("knows").ToList();
         }
 
-        public void AddNode(string label, IDictionary<string, object> properties)
+        public Vertex GetNode(string label)
         {
-            
-            var v1 = _gremlin.AddV(label).Property("name", "marko").Next();
-
+            var node = _gremlin.V().Has(label).ToList();
+            return node?.First();
         }
 
+        public void AddNode(string label, IDictionary<string, object> properties)
+        {
 
+            var vertex = _gremlin.AddV(label).Property("name", "testName").Next();
+
+            foreach (var property in properties)
+            {
+                _gremlin.V().Property(property.Key, property.Value);
+            }
+
+
+        }
     }
- }
-
+}
