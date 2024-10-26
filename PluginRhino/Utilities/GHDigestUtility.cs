@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphHop.SharedRhino.Utilities
+namespace PluginTemplate.PluginRhino.Utilities
 {
     public static class GHDigestUtility
     {
