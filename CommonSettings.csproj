@@ -24,10 +24,10 @@
         Are we building for Rhino 7 or Rhino 8 ?
   -->
   <PropertyGroup Condition="$(Configuration.EndsWith('R7'))">
-    <TargetFrameworks>net48</TargetFrameworks>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.EndsWith('R8'))">
-    <TargetFrameworks>net48;net7.0-windows</TargetFrameworks>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
   
   <!--
