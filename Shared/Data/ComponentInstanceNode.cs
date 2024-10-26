@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GraphHop.Shared.Data;
 
@@ -25,4 +26,16 @@ public struct ComponentInstanceNode
     /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_IGH_Attributes_Pivot.htm
     /// </summary>
     public float Y;
+
+    // <summary>
+    /// List of Input Parameter
+    /// 
+    /// </summary>
+    public IList<DataInputNode> Inputs;
+
+    // <summary>
+    /// List of Output Parameter
+    /// 
+    /// </summary>
+    public IList<DataOutputNode> Outputs;
 }

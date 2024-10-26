@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using GraphHop.PluginRhino.Utilities;
 using Grasshopper.Kernel;
 using PluginTemplate.PluginRhino.Utilities;
 using Rhino;
@@ -69,14 +70,14 @@ namespace GraphHop.PluginRhino.Commands
                 RhinoApp.WriteLine("Failed to load the Grasshopper document.");
                 return Result.Failure;
             }
-            // Iterate through all document objects and print their names
-            //foreach (IGH_DocumentObject obj in ghDocument.Objects)
-            //{
-            //    RhinoApp.WriteLine($"Object Name: {obj.NickName}");
-            //}
 
             GHDigestUtility.IterateDocumentObjects(ghDocument);
+
+            GraphStrutObject graphStrut = new GraphStrutObject();
+            graphStrut.IterateDocumentObjects(ghDocument);
+
             return Result.Success;
+
         }
     }
 }
