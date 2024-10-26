@@ -1,9 +1,7 @@
-﻿using System;
+﻿using GraphHop.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using PluginTemplate.Shared;
-
-namespace PluginTemplate.Tests.Shared
+namespace GraphHop.Tests.Shared
 {
     [TestClass]
     public class TestSharedExample

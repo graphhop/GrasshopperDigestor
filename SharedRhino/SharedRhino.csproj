@@ -28,9 +28,6 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="interface\" />
-  </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />
 

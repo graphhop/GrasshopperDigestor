@@ -80,7 +80,7 @@ namespace PluginTemplate.Tests.SharedRhino
                 var path = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
                 return Assembly.LoadFrom(path);
             }
-            if (name.StartsWith("GH_IO"))
+            if (name.StartsWith("GH_IO.dll"))
             {
                 var path = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\GH_IO.dll");
                 return Assembly.LoadFrom(path);
