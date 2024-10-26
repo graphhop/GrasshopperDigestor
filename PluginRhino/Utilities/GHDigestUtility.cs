@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Grasshopper.Rhinoceros.Display.Params.Param_ModelView;
+using System.Diagnostics;
 
 namespace PluginTemplate.PluginRhino.Utilities
 {
@@ -64,6 +65,8 @@ namespace PluginTemplate.PluginRhino.Utilities
 
         public static void IterateDocumentObjects(GH_Document ghDocument)
         {
+            System.Diagnostics.Debug.WriteLine("");
+            PrintDocumentProperties(ghDocument);
             // Iterate through all document objects and print their names
             foreach (IGH_DocumentObject obj in ghDocument.Objects)
             {
@@ -72,6 +75,17 @@ namespace PluginTemplate.PluginRhino.Utilities
                 System.Diagnostics.Debug.WriteLine("----------Input&Outputs---------");
                 GetConnectedObjects(obj);
             }
+        }
+
+        public static void PrintDocumentProperties(GH_Document ghDocument)
+        {
+            Debug.WriteLine($"Author: {ghDocument.Author}");
+            Debug.WriteLine($"DisplayName: {ghDocument.DisplayName}");
+            Debug.WriteLine($"DocumentID: {ghDocument.DocumentID}");
+            Debug.WriteLine($"FilePath: {ghDocument.FilePath}");
+            Debug.WriteLine($"Owner: {ghDocument.Owner}");
+            Debug.WriteLine($"RuntimeID: {ghDocument.RuntimeID}");
+            Debug.WriteLine($"SolutionState: {ghDocument.SolutionState}");
         }
 
         private static void ProcessSource(IGH_Param source)
