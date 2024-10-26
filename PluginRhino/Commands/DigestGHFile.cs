@@ -1,13 +1,10 @@
-﻿using Rhino;
-using Rhino.Commands;
-using Rhino.Geometry;
-using Rhino.Input;
-using Rhino.Input.Custom;
-using System.IO;
+﻿using System.IO;
 using Grasshopper.Kernel;
 using PluginTemplate.PluginRhino.Utilities;
+using Rhino;
+using Rhino.Commands;
 
-namespace PluginTemplate.PluginRhino
+namespace GraphHop.PluginRhino.Commands
 {
     public class DigestGHFile : Command
     {
