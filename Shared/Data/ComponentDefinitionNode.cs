@@ -2,11 +2,15 @@
 
 namespace GraphHop.Shared.Data;
 
+/// <summary>
+/// The definition (aka an actual implementation) of a component. This is independent of Grasshopper documents.
+/// </summary>
 public struct ComponentDefinitionNode
 {
     /// <summary>
     /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_DocumentObject_ComponentGuid.htm
     /// </summary>
+    [IdAttribute]
     public Guid ComponentGuid;
 
     /// <summary>

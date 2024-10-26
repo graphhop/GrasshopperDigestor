@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Sdk Name="Microsoft.NET.Sdk" />
-  
-  <Import Project="../CommonSettings.csproj" />
+
+	<Import Project="../CommonSettings.csproj" />
   
   <PropertyGroup>
-    <RootNamespace>$(CommonNamespace).Shared</RootNamespace>
+
+	  <RootNamespace>$(CommonNamespace).Shared</RootNamespace>
     <AssemblyName>$(CommonName).Shared</AssemblyName>
     <Description>Shared functionality not depending on Rhino</Description>
     <!--

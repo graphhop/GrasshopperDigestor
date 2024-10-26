@@ -2,11 +2,15 @@
 
 namespace GraphHop.Shared.Data;
 
+/// <summary>
+/// An input of an instance of a component.
+/// </summary>
 public struct DataInputNode
 {
     /// <summary>
     /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_InstanceDescription_InstanceGuid.htm
     /// </summary>
+    [IdAttribute]
     public Guid InstanceGuid;
 
     /// <summary>
