@@ -23,33 +23,33 @@
     GUIDs for the Grasshopper and the Rhino Plug-In. Make sure to set these to unique values.
   -->
   <PropertyGroup>
-    <GrasshopperPluginGuid>00000000-0000-0000-0000-000000000000</GrasshopperPluginGuid>
-    <RhinoPluginGuid>00000000-0000-0000-0000-000000000000</RhinoPluginGuid>
+    <GrasshopperPluginGuid>173FFA74-AFD6-4FCC-84C5-567B71FC2D5D</GrasshopperPluginGuid>
+    <RhinoPluginGuid>6DBA901A-49AE-4CE8-AA31-BD8979C89BAD</RhinoPluginGuid>
   </PropertyGroup>
   <!--
     Common name and namespace for all projects. In case you change the namespace, please also do
     a search and replace operation on all code files.
   -->
   <PropertyGroup>
-    <CommonNamespace>PluginTemplate</CommonNamespace>
-    <CommonName>PluginTemplate</CommonName>
+    <CommonNamespace>GraphHop</CommonNamespace>
+    <CommonName>GraphHop</CommonName>
   </PropertyGroup>
   <!--
     Author, Company, Copyright, Product
   -->
   <PropertyGroup>
-    <CommonAuthors>Alex Schiftner</CommonAuthors>
-    <CommonAuthorContact>alex@shapediver.com</CommonAuthorContact>
-    <CommonCompany>ShapeDiver</CommonCompany>
-    <CommonCopyright>ShapeDiver GmbH 2024</CommonCopyright>
-    <CommonProduct>A template plug-in for Grasshopper and Rhino</CommonProduct>
+    <CommonAuthors>Alex Schiftner, Cullen Sarles</CommonAuthors>
+    <CommonAuthorContact></CommonAuthorContact>
+    <CommonCompany>GraphHop</CommonCompany>
+    <CommonCopyright>GraphHop 2024</CommonCopyright>
+    <CommonProduct>Grasshopper Graph Based Source Control</CommonProduct>
     <YakName>$(CommonName)</YakName>
     <YakAuthors>$(CommonAuthors), $(CommonCompany)</YakAuthors>
     <YakDescription>$(CommonProduct)</YakDescription>
-    <YakUrl>https://github.com/shapediver/GrasshopperPluginTemplate</YakUrl>
+    <YakUrl>https://github.com/graphhop/GrasshopperDigestor</YakUrl>
     <YakIconFile>$(MSBuildThisFileDirectory)/Artwork/PluginRhino_64.png</YakIconFile>
     <YakKeywords>- Rhino
 - Grasshopper
-- Template</YakKeywords>
+- Source Control</YakKeywords>
   </PropertyGroup>
 </Project>
