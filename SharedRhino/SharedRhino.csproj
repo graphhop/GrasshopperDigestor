@@ -29,9 +29,6 @@
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="interface\" />
   </ItemGroup>
   

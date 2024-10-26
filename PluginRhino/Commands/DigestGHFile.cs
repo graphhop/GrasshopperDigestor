@@ -5,6 +5,7 @@ using Rhino.Input;
 using Rhino.Input.Custom;
 using System.IO;
 using Grasshopper.Kernel;
+using GraphHop.SharedRhino.Utilities;
 
 namespace PluginTemplate.PluginRhino
 {
@@ -67,11 +68,7 @@ namespace PluginTemplate.PluginRhino
                 return Result.Failure;
             }
 
-            // Iterate through all document objects and print their names
-            foreach (IGH_DocumentObject obj in ghDocument.Objects)
-            {
-                RhinoApp.WriteLine($"Object Name: {obj.NickName}");
-            }
+            GHDigest
 
             return Result.Success;
 #endif
