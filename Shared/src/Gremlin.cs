@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Gremlin.Net.Driver;
-using Gremlin.Net.Structure.IO.GraphSON;
 using Gremlin.Net.Driver.Remote;
 using Gremlin.Net.Process.Traversal;
 using Gremlin.Net.Structure;
@@ -14,14 +9,17 @@ namespace GraphHop.Shared.src.Gremlin
     /// <summary>
     /// Conncets to Thinkerpop throu Gremlin
     /// </summary>
-    public class Gremlin
+    public class GremlinConncetor
     {
         GraphTraversalSource _gremlin;
-        public Gremlin()
+        public GremlinConncetor()
         {
-            //var gremlinServer = new GremlinServer("localhost", 8182);
-            //using var gremlinClient = new GremlinClient(gremlinServer);
-            _gremlin = AnonymousTraversalSource.Traversal().WithRemote(new DriverRemoteConnection("localhost", 8182));
+          //  var gremlinServer = new GremlinServer("localhost", 8182);
+         //   var gremlinClient = new GremlinClient(gremlinServer);
+         //   var driverRemoteConnection = new DriverRemoteConnection(gremlinClient, "_gremlin");
+         //   _gremlin = AnonymousTraversalSource.Traversal().WithRemote(driverRemoteConnection);
+
+                _gremlin = AnonymousTraversalSource.Traversal().WithRemote(new DriverRemoteConnection("localhost", 8182));
         }
 
         public void AddTestObjects() 
@@ -34,6 +32,15 @@ namespace GraphHop.Shared.src.Gremlin
             var marko = _gremlin.V().Has("person", "name", "marko").Next();
             return _gremlin.V().Has("person", "name", "marko").Out("knows").ToList();
         }
+
+        public void AddNode(string label, IDictionary<string, object> properties)
+        {
+            
+            var v1 = _gremlin.AddV(label).Property("name", "marko").Next();
+
+        }
+
+
     }
  }
 
