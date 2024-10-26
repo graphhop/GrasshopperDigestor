@@ -4,6 +4,7 @@
   
   <Import Project="../CommonSettings.csproj" />
   <Import Project="../CommonReferencesRhino.csproj" />
+  <Import Project="../CommonReferencesGrasshopper.csproj" />
   
   <PropertyGroup>
     <RootNamespace>$(CommonNamespace).SharedRhino</RootNamespace>

@@ -38,7 +38,7 @@
         The maximum language version supported for .NET Framework is 7.3
         see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/configure-language-version
     -->
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>10</LangVersion>
     <!--
         EnableWindowsTargeting is explained here: 
         https://learn.microsoft.com/en-us/dotnet/core/tools/sdk-errors/netsdk1100
