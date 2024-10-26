@@ -45,6 +45,10 @@
     </AssemblyAttribute>
   </ItemGroup>
   
+  <ItemGroup>
+    <ProjectReference Include="..\SharedRhino\SharedRhino.csproj" />
+  </ItemGroup>
+  
   <Import Project="../CommonSettingsFinal.csproj" />
   
 </Project>
