@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Grasshopper.Rhinoceros.Display.Params.Param_ModelView;
 
 namespace PluginTemplate.PluginRhino.Utilities
 {
@@ -32,19 +33,43 @@ namespace PluginTemplate.PluginRhino.Utilities
                     ProcessRecipient(recipient);
                 }
             }
+            // Check if the object is a component
+            else if (obj is IGH_Component component)
+            {
+                // Get the inputs
+                foreach (var input in component.Params.Input)
+                {
+                    foreach (var source in input.Sources)
+                    {
+                        // Process each source
+                        ProcessSource(source);
+                    }
+                }
+
+                // Get the outputs
+                foreach (var output in component.Params.Output)
+                {
+                    foreach (var recipient in output.Recipients)
+                    {
+                        // Process each recipient
+                        ProcessRecipient(recipient);
+                    }
+                }
+            }
             else
             {
-                System.Diagnostics.Debug.WriteLine("The object is not a parameter.");
+                System.Diagnostics.Debug.WriteLine("The object is neither a parameter nor a component.");
             }
         }
 
         public static void IterateDocumentObjects(GH_Document ghDocument)
         {
-
             // Iterate through all document objects and print their names
             foreach (IGH_DocumentObject obj in ghDocument.Objects)
             {
-                RhinoApp.WriteLine($"Object Name: {obj.NickName}");
+                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Debug.WriteLine($"Object Name: {obj.Name}, NickName:  {obj.NickName} ");
+                System.Diagnostics.Debug.WriteLine("----------Input&Outputs---------");
                 GetConnectedObjects(obj);
             }
         }
@@ -52,14 +77,16 @@ namespace PluginTemplate.PluginRhino.Utilities
         private static void ProcessSource(IGH_Param source)
         {
             // Example processing logic for sources
-            System.Diagnostics.Debug.WriteLine($"Source Type: {source.GetType().Name}, NickName: {source.NickName}");
+            string parentComponentName = source.Attributes?.GetTopLevel?.DocObject?.Name ?? "Unknown";
+            System.Diagnostics.Debug.WriteLine($"Input Type: {source.GetType().Name}, NickName: {source.NickName}, Parent Component: {parentComponentName}");
             // Add additional processing logic here
         }
 
         private static void ProcessRecipient(IGH_Param recipient)
         {
             // Example processing logic for recipients
-            System.Diagnostics.Debug.WriteLine($"Recipient Type: {recipient.GetType().Name}, NickName: {recipient.NickName}");
+            string parentComponentName = recipient.Attributes?.GetTopLevel?.DocObject?.Name ?? "Unknown";
+            System.Diagnostics.Debug.WriteLine($"Output Type: {recipient.GetType().Name}, NickName: {recipient.NickName}, Parent Component: {parentComponentName}");
             // Add additional processing logic here
         }
     }
