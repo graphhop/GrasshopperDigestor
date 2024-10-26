@@ -1,0 +1,10 @@
+*.camproj
+*.trec
+capture/
+0074*/*.3dm
+#*.3dm
+*.3dmbak
+*/rendering/*
+*/reference/*
+*/geo/
+*/backup/
