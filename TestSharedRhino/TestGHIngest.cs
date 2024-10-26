@@ -20,19 +20,6 @@ namespace GraphHop.Tests.SharedRhino
             return Path.Combine(directory ?? string.Empty, $"../../../Sample File/{filename}");
         }
         
-        GH_Document OpenGrasshopperDocument(string filename, out GH_DocumentIO io)
-        {
-            var fullFilePath = GetPathRelativeToAssembly(filename);
-            // Load the Grasshopper document
-            io = new GH_DocumentIO();
-            if (!io.Open(fullFilePath))
-            {
-                return null;
-            }
-            
-            return io.Document;
-        }
-        
         /// <summary>
         /// Test setup for complete class, will be called once for all tests contained herein
         /// Change signature to "async static Task" in case of async tests
@@ -65,8 +52,9 @@ namespace GraphHop.Tests.SharedRhino
          //   var point = sharedRhinoExample.PlaneLineIntersection(Plane.WorldXY, new Line(new Point3d(1,1,-1), new Point3d(1,1,1)));
          //   Assert.AreEqual(0, point.DistanceToSquared(new Point3d(1,1,0)));
             var testFile = "Sample Grasshopper File/grasshopper-examples-master/gh/amoeba-curve-2d.ghx";
-            var testDoc = OpenGrasshopperDocument(testFile, out var io);
-            Assert.IsNotNull(testDoc);
+            var fullPath = GetPathRelativeToAssembly(testFile);
+            Assert.IsTrue(System.IO.File.Exists(fullPath));
+            GrasshopperParser.LoadGHFile(fullPath);
         }
 
         /// <summary>
