@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using GraphHop.PluginRhino.Utilities;
 using Grasshopper.Kernel;
-using PluginTemplate.PluginRhino.Utilities;
 using Rhino;
 using Rhino.Commands;
 

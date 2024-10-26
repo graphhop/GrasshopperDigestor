@@ -1,15 +1,9 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Commands;
-using Rhino;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using Rhino.Geometry;
+using Grasshopper.Kernel;
 
-namespace PluginTemplate.PluginRhino.Utilities
+namespace GraphHop.PluginRhino.Utilities
 {
     public static class GHDigestUtility
     {
