@@ -22,7 +22,7 @@ namespace PluginTemplate.PluginRhino
         public static DigestGHFile Instance { get; private set; }
 
         ///<returns>The command name as it appears on the Rhino command line.</returns>
-        public override string EnglishName => "PluginTemplateDigestGHFile";
+        public override string EnglishName => "DigestGHFile";
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
@@ -68,7 +68,7 @@ namespace PluginTemplate.PluginRhino
                 return Result.Failure;
             }
 
-            GHDigest
+            GHDigestUtility.IterateDocumentObjects(ghDocument);
 
             return Result.Success;
 #endif
