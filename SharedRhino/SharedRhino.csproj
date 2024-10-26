@@ -28,6 +28,9 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+  </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />
 
