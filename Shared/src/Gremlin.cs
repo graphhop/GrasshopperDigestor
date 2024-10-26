@@ -34,14 +34,15 @@ namespace GraphHop.Shared.src.Gremlin
         public async void CommitTransaction(GraphTraversalSource g, GraphTraversalSource gtx)
         {
             await gtx.Tx().CommitAsync();
+            
         }
 
 
         public void AddTestObjects() 
         {      
             var tx = BeginTransaction(_gremlin);
-                var v1 = tx.AddV("person").Property("name", "marko").Next();
-                var v2 = tx.AddV("person").Property("name", "stephen").Next();
+                var v1 = tx.AddV("person").Property("name", "marko").Iterate();
+              //  var v2 = tx.AddV("person").Property("name", "stephen").Iterate();
             CommitTransaction(_gremlin, tx);
     
         }
@@ -59,15 +60,18 @@ namespace GraphHop.Shared.src.Gremlin
 
         public void AddNode(string label, IDictionary<string, object> properties)
         {
-
-            var vertex = _gremlin.AddV(label).Property("name", "testName").Next();
-
+            var tx = BeginTransaction(_gremlin);
+            var vertex = _gremlin.AddV(label).Property("name", "testName");
+            CommitTransaction(_gremlin, tx);
+            /*
             foreach (var property in properties)
             {
+                var tx2 = BeginTransaction(_gremlin);
                 _gremlin.V().Property(property.Key, property.Value);
+                CommitTransaction(_gremlin, tx2);
+
             }
-
-
+            */
         }
     }
 }
