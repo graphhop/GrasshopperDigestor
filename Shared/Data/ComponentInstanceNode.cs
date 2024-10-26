@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GraphHop.SharedRhino.Data;
+namespace GraphHop.Shared.Data;
 
 /// <summary>
 /// An instance of a component in a document.

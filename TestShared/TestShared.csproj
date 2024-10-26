@@ -5,8 +5,10 @@
   <Import Project="../CommonSettings.csproj" />
   <Import Project="../CommonReferencesTests.csproj" />
   
+	
   <PropertyGroup>
-    <RootNamespace>$(CommonNamespace).Tests.Shared</RootNamespace>
+
+	  <RootNamespace>$(CommonNamespace).Tests.Shared</RootNamespace>
     <AssemblyName>$(CommonName).Tests.Shared</AssemblyName>
     <Description>Tests for shared functionality not depending on Rhino</Description>
     <!--

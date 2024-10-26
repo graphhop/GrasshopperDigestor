@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Rhino.Geometry;
+//using PluginTemplate.SharedRhino;
 using GraphHop.SharedRhino;
 using Grasshopper.Kernel;
 
@@ -60,6 +61,9 @@ namespace GraphHop.Tests.SharedRhino
         [TestMethod]
         public void TestIngest()
         {
+          //  var sharedRhinoExample = new SharedRhinoExample();
+         //   var point = sharedRhinoExample.PlaneLineIntersection(Plane.WorldXY, new Line(new Point3d(1,1,-1), new Point3d(1,1,1)));
+         //   Assert.AreEqual(0, point.DistanceToSquared(new Point3d(1,1,0)));
             var testFile = "Sample Grasshopper File/grasshopper-examples-master/gh/amoeba-curve-2d.ghx";
             var testDoc = OpenGrasshopperDocument(testFile, out var io);
             Assert.IsNotNull(testDoc);

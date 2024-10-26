@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GraphHop.SharedRhino.Data;
+namespace GraphHop.Shared.Data;
 
 /// <summary>
 /// The definition (aka an actual implementation) of a component. This is independent of Grasshopper documents.
