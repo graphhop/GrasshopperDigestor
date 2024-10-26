@@ -11,8 +11,9 @@ namespace GraphHop.Tests.Shared
     [TestClass]
     public class TestGremlin
     {
-
-
+        /// <summary>
+        /// need to have local server up and running
+        /// </summary>
         [TestMethod]
         public void TestGremlinInit()
         {

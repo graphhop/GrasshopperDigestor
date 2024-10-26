@@ -14,12 +14,12 @@ namespace GraphHop.Shared.src.Gremlin
         GraphTraversalSource _gremlin;
         public GremlinConncetor()
         {
-          //  var gremlinServer = new GremlinServer("localhost", 8182);
-         //   var gremlinClient = new GremlinClient(gremlinServer);
-         //   var driverRemoteConnection = new DriverRemoteConnection(gremlinClient, "_gremlin");
-         //   _gremlin = AnonymousTraversalSource.Traversal().WithRemote(driverRemoteConnection);
+            var gremlinServer = new GremlinServer("localhost", 8182);
+            var gremlinClient = new GremlinClient(gremlinServer);
+            var driverRemoteConnection = new DriverRemoteConnection(gremlinClient, "g");
+            _gremlin = AnonymousTraversalSource.Traversal().WithRemote(driverRemoteConnection);
 
-                _gremlin = AnonymousTraversalSource.Traversal().WithRemote(new DriverRemoteConnection("localhost", 8182));
+           // _gremlin = AnonymousTraversalSource.Traversal().WithRemote(new DriverRemoteConnection("localhost", 8182));
         }
 
         public void AddTestObjects() 
