@@ -45,6 +45,7 @@ namespace PluginTemplate.PluginRhino.Utilities
             foreach (IGH_DocumentObject obj in ghDocument.Objects)
             {
                 RhinoApp.WriteLine($"Object Name: {obj.NickName}");
+                GetConnectedObjects(obj);
             }
         }
 
