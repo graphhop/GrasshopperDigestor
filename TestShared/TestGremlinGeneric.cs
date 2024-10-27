@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using GraphHop.Shared;
 using GraphHop.Shared.Data;
 using GraphHop.SharedRhino.Data;
@@ -28,6 +29,7 @@ namespace PluginTemplate.Tests.Shared
             // This uses the default Neptune and Gremlin port, 8182
             var gremlinServer = new GremlinServer(endpoint, 8182, enableSsl: false);
             var gremlinClient = new GremlinClient(gremlinServer);
+
             var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
             var gremlin = AnonymousTraversalSource.Traversal().WithRemote(remoteConnection);
             _gremlin = new GremlinGeneric(gremlin);
@@ -170,6 +172,9 @@ namespace PluginTemplate.Tests.Shared
             var testTraversal = _gremlin.FindConnectedNodes(nodeInstance1).ToList();
             var testTraversal2 = _gremlin.FindConnectedNodes(nodeInstance2).ToList();
 
+            
+
+
 
             var verticesA = _gremlin.Find(nodeInstance1).ToList();
             var verticeB = _gremlin.Find(nodeInstance2).ToList();
@@ -178,6 +183,30 @@ namespace PluginTemplate.Tests.Shared
 
 
          //   Assert.IsTrue(_gremlin.Exists(nodeDef));
+        }
+        [TestMethod]
+        public async Task Test_NormalCall()
+
+        {
+            var endpoint = "127.0.0.1";
+            // This uses the default Neptune and Gremlin port, 8182
+            var gremlinServer = new GremlinServer(endpoint, 8182, enableSsl: false);
+            var gremlinClient = new GremlinClient(gremlinServer);
+
+
+
+           // var gremlinQuery = $"g.V('{12}').repeat(both()).emit().dedup()";
+            var gremlinQuery = $"g.V('{12}')";
+            var gremlinQuery2 = $"g.V('{12}').out()";
+            var gremlinQuery3 = $"g.V()";
+            var gremlinQuery4 = $"g.E()";
+
+            var resultSet = await gremlinClient.SubmitAsync<dynamic>(gremlinQuery4);
+
+            var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
+            var gremlin = AnonymousTraversalSource.Traversal().WithRemote(remoteConnection);
+            _gremlin = new GremlinGeneric(gremlin);
+
         }
 
 

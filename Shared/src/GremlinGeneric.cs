@@ -30,6 +30,7 @@ namespace GraphHop.Shared
         public GremlinGeneric(GraphTraversalSource gremlin)
         {
             _gremlin = gremlin;
+            
         }
 
         public bool Exists(object node)
@@ -43,6 +44,7 @@ namespace GraphHop.Shared
             var n2 = FindAnonymous(node2);
             var targetType = node2.GetType();
 
+            var isThere = ConnectionExists(node1, node2);
 
             if (n1.HasNext() && n1.HasNext())
             {
@@ -56,7 +58,9 @@ namespace GraphHop.Shared
             {
                 throw new Exception("Target node not found");
             }
+            var isThereAfterAdd = ConnectionExists(node1, node2);
 
+            var isThereAfterAddReverse = ConnectionExists(node2, node1);
 
             /*
             if (n1 is null)
@@ -146,6 +150,9 @@ namespace GraphHop.Shared
 
             var test = _gremlin.V();
             var test2 = _gremlin.V().ToList();
+
+            var test22 = _gremlin.E().ToList();
+
 
             var testHas2 = _gremlin.V().HasLabel(nodeType.Name).Has(idField.Name, nodeId).Out().ToList();
             _gremlin.V().In();
