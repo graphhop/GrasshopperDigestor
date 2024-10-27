@@ -86,7 +86,7 @@ namespace GraphHop.PluginRhino.Commands
             {
                 PluginRhino.Gremlin.Add(inputNode);
             }
-            foreach (var outputNode in graphStrut.InputNodes.Values)
+            foreach (var outputNode in graphStrut.OutputNodes.Values)
             {
                 PluginRhino.Gremlin.Add(outputNode);
             }
@@ -96,27 +96,27 @@ namespace GraphHop.PluginRhino.Commands
                 PluginRhino.Gremlin.Add(instanceNode);
                 PluginRhino.Gremlin.Connect(instanceNode,
                     graphStrut.ComponentDefinitionNodes[instanceNode.ComponentGuid]);
-                // foreach (var inputId in instanceNode.Inputs)
-                // {
-                //     PluginRhino.Gremlin.Connect(graphStrut.InputNodes[inputId],
-                //         instanceNode);
-                // }
-                //
-                // foreach (var outputId in instanceNode.Outputs)
-                // {
-                //     PluginRhino.Gremlin.Connect(instanceNode,
-                //         graphStrut.OutputNodes[outputId]);
-                // }
+                foreach (var inputId in instanceNode.Inputs)
+                {
+                    PluginRhino.Gremlin.Connect(graphStrut.InputNodes[inputId],
+                        instanceNode);
+                }
+                
+                foreach (var outputId in instanceNode.Outputs)
+                {
+                    PluginRhino.Gremlin.Connect(instanceNode,
+                        graphStrut.OutputNodes[outputId]);
+                }
             }
             
-            // foreach (var outputNode in graphStrut.OutputNodes.Values)
-            // {
-            //     if (graphStrut.InputNodes.TryGetValue(outputNode.TargetGuid, out var inputNode))
-            //     {
-            //         PluginRhino.Gremlin.Connect(outputNode,inputNode);
-            //     }
-            // }
-            
+            foreach (var outputNode in graphStrut.OutputNodes.Values)
+            {
+                if (graphStrut.InputNodes.TryGetValue(outputNode.TargetGuid, out var inputNode))
+                {
+                    PluginRhino.Gremlin.Connect(outputNode,inputNode);
+                }
+            }
+            RhinoApp.WriteLine($"Uploaded: {filePath}");
 
             return Result.Success;
 

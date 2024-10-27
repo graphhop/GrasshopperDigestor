@@ -137,18 +137,22 @@ namespace GraphHop.PluginRhino.Utilities
         /// <returns>The populated component instance node.</returns>
         public ComponentInstanceNode PopulateDocumentObjectProperties(IGH_DocumentObject obj)
         {
-            ComponentInstanceNode componentInstanceNode = new ComponentInstanceNode
+            if (!ComponentInstanceNodes.TryGetValue(obj.InstanceGuid, out var componentInstanceNode))
             {
-                InstanceGuid = obj.InstanceGuid,
-                ComponentGuid = obj.ComponentGuid,
-                NickName = obj.NickName,
-                X = obj.Attributes.Pivot.X,
-                Y = obj.Attributes.Pivot.Y,
-                Inputs = new(),
-                Outputs = new()
-            };
+                componentInstanceNode = new ComponentInstanceNode
+                {
+                    InstanceGuid = obj.InstanceGuid,
+                    ComponentGuid = obj.ComponentGuid,
+                    NickName = obj.NickName,
+                    X = obj.Attributes.Pivot.X,
+                    Y = obj.Attributes.Pivot.Y,
+                    Inputs = new(),
+                    Outputs = new()
+                };
 
-            ComponentInstanceNodes.Add(obj.InstanceGuid,componentInstanceNode);
+                ComponentInstanceNodes.Add(obj.InstanceGuid,componentInstanceNode);
+            }
+            
             return componentInstanceNode;
         }
 
@@ -159,15 +163,19 @@ namespace GraphHop.PluginRhino.Utilities
         /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessInput(IGH_Param source, ComponentInstanceNode componentInstanceNode)
         {
-            var inputNode = new DataInputNode
+            if (!InputNodes.ContainsKey(source.InstanceGuid))
             {
-                TargetGuid = source.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
-                InstanceGuid = source.InstanceGuid,
-                NickName = source.NickName,
-                Name = source.GetType().Name
-            };
-            //InputNodes.Add(inputNode.InstanceGuid, inputNode);
-            componentInstanceNode.Inputs.Add(inputNode.InstanceGuid);
+                var inputNode = new DataInputNode
+                {
+                    TargetGuid = source.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
+                    InstanceGuid = source.InstanceGuid,
+                    NickName = source.NickName,
+                    Name = source.GetType().Name
+                };
+                InputNodes.Add(inputNode.InstanceGuid, inputNode);
+            }
+
+            componentInstanceNode.Inputs.Add(source.InstanceGuid);
         }
 
         /// <summary>
@@ -177,15 +185,18 @@ namespace GraphHop.PluginRhino.Utilities
         /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessOutput(IGH_Param recipient, ComponentInstanceNode componentInstanceNode)
         {
-            var outputNode = new DataOutputNode
+            if(!OutputNodes.ContainsKey(recipient.InstanceGuid))
             {
-                TargetGuid = recipient.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
-                InstanceGuid = recipient.InstanceGuid,
-                NickName = recipient.NickName,
-                Name = recipient.GetType().Name
-            };
-            //OutputNodes.Add(outputNode.InstanceGuid, outputNode);
-            componentInstanceNode.Outputs.Add(outputNode.InstanceGuid);
+                var outputNode = new DataOutputNode
+                {
+                    TargetGuid = recipient.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
+                    InstanceGuid = recipient.InstanceGuid,
+                    NickName = recipient.NickName,
+                    Name = recipient.GetType().Name
+                };
+                OutputNodes.Add(outputNode.InstanceGuid, outputNode);
+            }
+            componentInstanceNode.Outputs.Add(recipient.InstanceGuid);
         }
     }
 }
