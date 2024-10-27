@@ -12,7 +12,7 @@ namespace GraphHop.Shared
     {
         void Add(object node);
 
-        GraphTraversal<Vertex, Vertex> Find(object node);
+        GraphTraversal<Vertex, Vertex> Find(object node, GraphTraversal<Vertex, Vertex> start = null);
 
         GraphTraversal<object, Vertex> FindAnonymous(object node);
 
@@ -45,7 +45,7 @@ namespace GraphHop.Shared
 
             if (n1.HasNext() && n1.HasNext())
             {
-                n1.AddE(targetType.Name).To(n2);
+                n1.AddE(targetType.Name).To(n2).Next();
             }
             else if (!n1.HasNext())
             {
@@ -59,7 +59,18 @@ namespace GraphHop.Shared
 
         public bool ConnectionExists(object node1, object node2)
         {
-            throw new NotImplementedException();
+            var n1 = Find(node1);
+            if (!n1.HasNext())
+            {
+                return false;
+            }
+            var targetType = node2.GetType();
+            var result = n1.OutE(targetType.Name).InV();
+            if (!result.HasNext())
+            {
+                return false;
+            }
+            return Find(node2, result).HasNext();
         }
 
         public GraphTraversal<object, Vertex> FindAnonymous(object node)
@@ -78,7 +89,7 @@ namespace GraphHop.Shared
                 .Has(idField.Name, idField.GetValue(node));
         }
 
-        public GraphTraversal<Vertex, Vertex> Find(object node)
+        public GraphTraversal<Vertex, Vertex> Find(object node, GraphTraversal<Vertex, Vertex> start = null)
         {
             var nodeType = node.GetType();
             var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -89,7 +100,7 @@ namespace GraphHop.Shared
                 throw new Exception("No IdAttribute found on node");
             }
 
-            return _gremlin.V()
+            return (start != null ? start : _gremlin.V())
                 .HasLabel(nodeType.Name)
                 .Has(idField.Name, idField.GetValue(node));
         }

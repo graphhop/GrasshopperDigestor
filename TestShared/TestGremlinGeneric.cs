@@ -78,6 +78,7 @@ namespace PluginTemplate.Tests.Shared
             Assert.IsTrue(_gremlin.Exists(nodeDef));
             Assert.IsTrue(_gremlin.Exists(nodeInstance));
             _gremlin.Connect(nodeDef, nodeInstance);
+            Assert.IsTrue(_gremlin.ConnectionExists(nodeDef, nodeInstance));
         }
 
         /// <summary>
