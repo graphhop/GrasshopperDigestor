@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Gremlin.Net.Driver;
@@ -67,6 +68,17 @@ namespace GraphHop.Shared.src.Gremlin
             {
                 _gremlin.V().HasLabel(label).Property(property.Key, property.Value).Iterate();
             }         
+        }
+
+        public void AddEdge(Guid fromGuid, Guid toGuid)
+        {
+            
+            /*
+            var marko = _gremlin.V().Has("person", "name", "marko").Next();
+            return _gremlin.V().Has("person", "name", "marko").Out("knows").ToList();
+
+            var vertex = _gremlin.AddE(label).From().To().Iterate();
+            */
         }
     }
 }
