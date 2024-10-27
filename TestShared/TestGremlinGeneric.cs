@@ -115,32 +115,36 @@ namespace PluginTemplate.Tests.Shared
         {
             var nodeDocument = new DocumentNode()
             {
-                DocumentID = Guid.NewGuid(),
+                DocumentID = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F70"),
             };
+
 
             var nodeInstance1 = new ComponentInstanceNode()
             {
-                ComponentGuid = Guid.NewGuid(),
+                InstanceGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F79"),
+                ComponentGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F78"),
                 NickName = "1"
             };
             var nodeInstance2 = new ComponentInstanceNode()
             {
-                ComponentGuid = Guid.NewGuid(),
+                InstanceGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F77"),
+                ComponentGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F76"),
                 NickName = "2"
             };
             var nodeInstance3 = new ComponentInstanceNode()
             {
-                ComponentGuid = Guid.NewGuid(),
+                InstanceGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F75"),
+                ComponentGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F74"),
                 NickName = "2"
             };
             var nodeDef1 = new ComponentDefinitionNode()
             {
-                ComponentGuid = Guid.NewGuid(),
+                ComponentGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F73"),
                 Name = "11"
             };
             var nodeDef2 = new ComponentDefinitionNode()
             {
-                ComponentGuid = Guid.NewGuid(),
+                ComponentGuid = Guid.Parse("C0357A56-78CF-4C24-834C-794C43EA9F72"),
                 Name = "22"
             };
             _gremlin.Add(nodeDocument);
@@ -153,12 +157,18 @@ namespace PluginTemplate.Tests.Shared
 
             _gremlin.Connect(nodeDocument, nodeInstance1);
             _gremlin.Connect(nodeDocument, nodeInstance2);
-       //     _gremlin.Connect(nodeDocument, nodeInstance3);
+            //_gremlin.Connect(nodeDocument, nodeInstance3);
 
             _gremlin.Connect(nodeInstance1, nodeDef1);
             _gremlin.Connect(nodeInstance2, nodeDef1);
             _gremlin.Connect(nodeInstance2, nodeDef2);
 
+            var verticesDoc = _gremlin.Find(nodeDocument).ToList();
+
+            var verticesATrav = _gremlin.Find(nodeInstance1);
+
+            var testTraversal = _gremlin.FindConnectedNodes(nodeInstance1).ToList();
+            var testTraversal2 = _gremlin.FindConnectedNodes(nodeInstance2).ToList();
 
 
             var verticesA = _gremlin.Find(nodeInstance1).ToList();
