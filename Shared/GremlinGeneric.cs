@@ -7,19 +7,48 @@ using Gremlin.Net.Structure;
 
 namespace GraphHop.Shared;
 
+/// <summary>
+/// Generic interface for Gremlin queries
+/// </summary>
 public interface IGremlinGeneric
 {
+    /// <summary>
+    /// Add a node.
+    /// Only fields with the attributes <see cref="IdAttribute"/>, <see cref="EqualityCheckAttribute"/> 
+    /// or <see cref="SerializeAttribute"/> will be added.
+    /// </summary>
+    /// <param name="node"></param>
     void Add(object node);
 
-    GraphTraversal<Vertex, Vertex> Find(object node, GraphTraversal<Vertex, Vertex> start = null);
+    /// <summary>
+    /// Find nodes.
+    /// This matches nodes by fields with the attributes <see cref="IdAttribute"/> or <see cref="EqualityCheckAttribute"/>.
+    /// </summary>
+    /// <param name="node">Node to find.</param>
+    /// <param name="start">Where to start the graph traversal.</param>
+    /// <returns></returns>
+    GraphTraversal<T, Vertex> Find<T>(object node, GraphTraversal<T, Vertex> start);
 
-    GraphTraversal<object, Vertex> FindAnonymous(object node);
-
-
+    /// <summary>
+    /// Connect nodes by an edge.
+    /// </summary>
+    /// <param name="node1"></param>
+    /// <param name="node2"></param>
     void Connect(object node1, object node2);
 
+    /// <summary>
+    /// Check for existance of a node.
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
     bool Exists(object node);
 
+    /// <summary>
+    /// Check for existance of a connection between two nodes.
+    /// </summary>
+    /// <param name="node1"></param>
+    /// <param name="node2"></param>
+    /// <returns></returns>
     bool ConnectionExists(object node1, object node2);
 }
 
@@ -33,13 +62,13 @@ public class GremlinGeneric : IGremlinGeneric
 
     public bool Exists(object node)
     {
-        return Find(node).HasNext();
+        return Find(node, _gremlin.V()).HasNext();
     }
 
     public void Connect(object node1, object node2)
     {
-        var n1 = Find(node1);
-        var n2 = FindAnonymous(node2);
+        var n1 = Find(node1, _gremlin.V());
+        var n2 = Find(node2, __.V());
         var targetType = node2.GetType();
 
         if (n1.HasNext() && n1.HasNext())
@@ -58,7 +87,7 @@ public class GremlinGeneric : IGremlinGeneric
 
     public bool ConnectionExists(object node1, object node2)
     {
-        var n1 = Find(node1);
+        var n1 = Find(node1, _gremlin.V());
         if (!n1.HasNext())
         {
             return false;
@@ -72,7 +101,7 @@ public class GremlinGeneric : IGremlinGeneric
         return Find(node2, result).HasNext();
     }
 
-    public GraphTraversal<object, Vertex> FindAnonymous(object node)
+    public GraphTraversal<T, Vertex> Find<T>(object node, GraphTraversal<T, Vertex> start)
     {
         var nodeType = node.GetType();
         var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -83,23 +112,7 @@ public class GremlinGeneric : IGremlinGeneric
             throw new Exception("No IdAttribute found on node");
         }
 
-        return __.V()
-            .HasLabel(nodeType.Name)
-            .Has(idField.Name, idField.GetValue(node));
-    }
-
-    public GraphTraversal<Vertex, Vertex> Find(object node, GraphTraversal<Vertex, Vertex> start = null)
-    {
-        var nodeType = node.GetType();
-        var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
-        var attType = typeof(IdAttribute);
-        var idField = fieldInfos.Where(field => field.IsDefined(attType, false)).FirstOrDefault();
-        if (idField == null)
-        {
-            throw new Exception("No IdAttribute found on node");
-        }
-
-        return (start != null ? start : _gremlin.V())
+        return start
             .HasLabel(nodeType.Name)
             .Has(idField.Name, idField.GetValue(node));
     }
