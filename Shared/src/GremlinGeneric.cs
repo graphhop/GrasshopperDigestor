@@ -110,8 +110,12 @@ namespace GraphHop.Shared
             var nodeType = node.GetType();
             var x = _gremlin.AddV(nodeType.Name);
 
-            var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
-         
+            var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance)
+                .Where(field => field.IsDefined(typeof(IdAttribute), false)
+                    | field.IsDefined(typeof(EqualityCheckAttribute), false)
+                    | field.IsDefined(typeof(SerializeAttribute), false)
+                );
+
             // loop over all properties of the node and add them to the vertex
             foreach (var field in fieldInfos)
             {

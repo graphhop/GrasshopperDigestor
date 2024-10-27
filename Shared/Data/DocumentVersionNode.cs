@@ -8,6 +8,7 @@ namespace GraphHop.Shared.Data;
 public struct DocumentVersionNode
 {
     [IdAttribute]
+    [EqualityCheck]
     public Guid VersionId;
     
     // TODO add properties like timestamp, author, copyright, description, etc

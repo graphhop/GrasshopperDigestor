@@ -61,6 +61,22 @@ namespace PluginTemplate.Tests.Shared
         /// Change signature to "async Task" in case of async tests
         /// </summary>
         [TestMethod]
+        public void Test_Add_Exists_01()
+        {
+            var node = new ComponentInstanceNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                NickName = "test"
+            };
+            _gremlin.Add(node);
+            Assert.IsTrue(_gremlin.Exists(node)); ;
+        }
+
+        /// <summary>
+        /// Test method
+        /// Change signature to "async Task" in case of async tests
+        /// </summary>
+        [TestMethod]
         public void Test_Connect_Exists_00()
         {
             var nodeDef = new ComponentDefinitionNode()

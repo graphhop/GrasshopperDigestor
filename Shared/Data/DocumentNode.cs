@@ -11,6 +11,7 @@ public struct DocumentNode
     /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_Document_DocumentID.htm
     /// </summary>
     [IdAttribute]
+    [EqualityCheck]
     public Guid DocumentID;
 
 }
