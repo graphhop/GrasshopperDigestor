@@ -24,6 +24,48 @@ namespace GraphHop.PluginRhino.Utilities
         // Node to store document information
         public DocumentNode DocumentNode = new DocumentNode();
 
+
+        /// <summary>
+        /// Iterates through all document objects and processes them.
+        /// </summary>
+        /// <param name="ghDocument">The Grasshopper document to iterate through.</param>
+        public void IterateDocumentObjects(GH_Document ghDocument)
+        {
+            try
+            {
+                // Populate document properties
+                PopulateDocumentProperties(ghDocument);
+
+                // Iterate through all document objects
+                foreach (IGH_DocumentObject obj in ghDocument.Objects)
+                {
+                    // Check if the object is a new component definition
+                    if (ComponentDefinitionNodes.All(x => x.ComponentGuid != obj.ComponentGuid))
+                    {
+                        ComponentDefinitionNodes.Add(new ComponentDefinitionNode
+                        {
+                            ComponentGuid = obj.ComponentGuid,
+                            Name = obj.Name,
+                            // Uncomment and add additional properties if needed
+                            // ComponentCategory = obj.Category,
+                            // ComponentSubCategory = obj.SubCategory,
+                            // ComponentDescription = obj.Description
+                        });
+                    }
+
+                    // Populate properties of the document object
+                    var componentInstanceNode = PopulateDocumentObjectProperties(obj);
+
+                    // Process connected objects
+                    GetConnectedObjects(obj, componentInstanceNode);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// Processes the connected objects (inputs and outputs) of a given document object.
         /// </summary>
@@ -74,47 +116,6 @@ namespace GraphHop.PluginRhino.Utilities
         }
 
         /// <summary>
-        /// Iterates through all document objects and processes them.
-        /// </summary>
-        /// <param name="ghDocument">The Grasshopper document to iterate through.</param>
-        public void IterateDocumentObjects(GH_Document ghDocument)
-        {
-            try
-            {
-                // Populate document properties
-                PopulateDocumentProperties(ghDocument);
-
-                // Iterate through all document objects
-                foreach (IGH_DocumentObject obj in ghDocument.Objects)
-                {
-                    // Check if the object is a new component definition
-                    if (ComponentDefinitionNodes.All(x => x.ComponentGuid != obj.ComponentGuid))
-                    {
-                        ComponentDefinitionNodes.Add(new ComponentDefinitionNode
-                        {
-                            ComponentGuid = obj.ComponentGuid,
-                            Name = obj.Name,
-                            // Uncomment and add additional properties if needed
-                            // ComponentCategory = obj.Category,
-                            // ComponentSubCategory = obj.SubCategory,
-                            // ComponentDescription = obj.Description
-                        });
-                    }
-
-                    // Populate properties of the document object
-                    var componentInstanceNode = PopulateDocumentObjectProperties(obj);
-
-                    // Process connected objects
-                    GetConnectedObjects(obj, componentInstanceNode);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
         /// Populates the properties of the document node.
         /// </summary>
         /// <param name="ghDocument">The Grasshopper document to process.</param>
@@ -135,6 +136,7 @@ namespace GraphHop.PluginRhino.Utilities
             ComponentInstanceNode componentInstanceNode = new ComponentInstanceNode
             {
                 InstanceGuid = obj.InstanceGuid,
+                ComponentGuid = obj.ComponentGuid,
                 NickName = obj.NickName,
                 X = obj.Attributes.Pivot.X,
                 Y = obj.Attributes.Pivot.Y

@@ -1,7 +1,10 @@
-﻿using Rhino;
-using System;
+﻿using GraphHop.Shared;
+using Gremlin.Net.Driver;
+using Gremlin.Net.Driver.Remote;
+using Gremlin.Net.Process.Traversal;
+using Rhino.PlugIns;
 
-namespace PluginTemplate.PluginRhino
+namespace GraphHop.PluginRhino
 {
     ///<summary>
     /// Every RhinoCommon .rhp assembly must have one and only one PlugIn-derived
@@ -12,9 +15,27 @@ namespace PluginTemplate.PluginRhino
     ///</summary>
     public class PluginRhino : Rhino.PlugIns.PlugIn
     {
+        private PlugInLoadTime _loadTime;
+
         public PluginRhino()
         {
             Instance = this;
+        }
+
+        
+        public static IGremlinGeneric Gremlin;
+        
+        protected override LoadReturnCode OnLoad(ref string errorMessage)
+        {
+            var endpoint = "127.0.0.1";
+            // This uses the default Neptune and Gremlin port, 8182
+            var gremlinServer = new GremlinServer(endpoint, 8182, enableSsl: false);
+            var gremlinClient = new GremlinClient(gremlinServer);
+            var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
+            var gremlin = AnonymousTraversalSource.Traversal().WithRemote(remoteConnection);
+            Gremlin = new GremlinGeneric(gremlin);
+            
+            return base.OnLoad(ref errorMessage);
         }
 
         ///<summary>Gets the only instance of the MyRhinoPlugin1 plug-in.</summary>
