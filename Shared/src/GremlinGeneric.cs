@@ -12,10 +12,7 @@ namespace GraphHop.Shared
     {
         void Add(object node);
 
-        GraphTraversal<Vertex, Vertex> Find(object node, GraphTraversal<Vertex, Vertex> start = null);
-
-        GraphTraversal<object, Vertex> FindAnonymous(object node);
-
+        GraphTraversal<Vertex, Vertex> Find(object node);
 
         void Connect(object node1, object node2);
 
@@ -40,12 +37,12 @@ namespace GraphHop.Shared
         public void Connect(object node1, object node2)
         {
             var n1 = Find(node1);
-            var n2 = FindAnonymous(node2);
+            var n2 = Find(node2);
             var targetType = node2.GetType();
 
             if (n1.HasNext() && n1.HasNext())
             {
-                n1.AddE(targetType.Name).To(n2).Next();
+                n1.AddE(targetType.Name).To(n2);
             }
             else if (!n1.HasNext())
             {
@@ -59,21 +56,10 @@ namespace GraphHop.Shared
 
         public bool ConnectionExists(object node1, object node2)
         {
-            var n1 = Find(node1);
-            if (!n1.HasNext())
-            {
-                return false;
-            }
-            var targetType = node2.GetType();
-            var result = n1.OutE(targetType.Name).InV();
-            if (!result.HasNext())
-            {
-                return false;
-            }
-            return Find(node2, result).HasNext();
+            throw new NotImplementedException();
         }
 
-        public GraphTraversal<object, Vertex> FindAnonymous(object node)
+        public GraphTraversal<Vertex, Vertex> Find(object node)
         {
             var nodeType = node.GetType();
             var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -84,23 +70,7 @@ namespace GraphHop.Shared
                 throw new Exception("No IdAttribute found on node");
             }
 
-            return __.V()
-                .HasLabel(nodeType.Name)
-                .Has(idField.Name, idField.GetValue(node));
-        }
-
-        public GraphTraversal<Vertex, Vertex> Find(object node, GraphTraversal<Vertex, Vertex> start = null)
-        {
-            var nodeType = node.GetType();
-            var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
-            var attType = typeof(IdAttribute);
-            var idField = fieldInfos.Where(field => field.IsDefined(attType, false)).FirstOrDefault();
-            if (idField == null)
-            {
-                throw new Exception("No IdAttribute found on node");
-            }
-
-            return (start != null ? start : _gremlin.V())
+            return _gremlin.V()
                 .HasLabel(nodeType.Name)
                 .Has(idField.Name, idField.GetValue(node));
         }

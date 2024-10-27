@@ -106,6 +106,72 @@ namespace PluginTemplate.Tests.Shared
         }
 
         /// <summary>
+        /// Test method
+        /// Change signature to "async Task" in case of async tests
+        /// </summary>
+        [TestMethod]
+        public void TestBuildVersionGraph()
+
+        {
+            var nodeDocument = new DocumentNode()
+            {
+                DocumentID = Guid.NewGuid(),
+            };
+
+            var nodeInstance1 = new ComponentInstanceNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                NickName = "1"
+            };
+            var nodeInstance2 = new ComponentInstanceNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                NickName = "2"
+            };
+            var nodeInstance3 = new ComponentInstanceNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                NickName = "2"
+            };
+            var nodeDef1 = new ComponentDefinitionNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                Name = "11"
+            };
+            var nodeDef2 = new ComponentDefinitionNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                Name = "22"
+            };
+            _gremlin.Add(nodeDocument);
+            _gremlin.Add(nodeInstance1);
+            _gremlin.Add(nodeInstance2);
+            _gremlin.Add(nodeInstance3);
+
+            _gremlin.Add(nodeDef1);
+            _gremlin.Add(nodeDef2);
+
+            _gremlin.Connect(nodeDocument, nodeInstance1);
+            _gremlin.Connect(nodeDocument, nodeInstance2);
+       //     _gremlin.Connect(nodeDocument, nodeInstance3);
+
+            _gremlin.Connect(nodeInstance1, nodeDef1);
+            _gremlin.Connect(nodeInstance2, nodeDef1);
+            _gremlin.Connect(nodeInstance2, nodeDef2);
+
+
+
+            var verticesA = _gremlin.Find(nodeInstance1).ToList();
+            var verticeB = _gremlin.Find(nodeInstance2).ToList();
+
+            var uniqueToB = verticeB.Except(verticesA);
+
+
+         //   Assert.IsTrue(_gremlin.Exists(nodeDef));
+        }
+
+
+        /// <summary>
         /// Test cleanup per test, will be called once for each test
         /// Change signature to "async Task" in case of async tests
         /// </summary>
