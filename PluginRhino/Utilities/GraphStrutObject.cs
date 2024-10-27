@@ -12,52 +12,57 @@ namespace GraphHop.PluginRhino.Utilities
 {
     public class GraphStrutObject
     {
-        // add ComponentInstanceNode for each document object
-        //if ComponentDefinitionNode doesnt exist add one
+        // List to store component definition nodes
         public List<ComponentDefinitionNode> ComponentDefinitionNodes = new List<ComponentDefinitionNode>();
+
+        // List to store component instance nodes
         public List<ComponentInstanceNode> ComponentInstanceNodes = new List<ComponentInstanceNode>();
+
+        // Node to store document version information
         public DocumentVersionNode DocumentVersionNode = new DocumentVersionNode();
+
+        // Node to store document information
         public DocumentNode DocumentNode = new DocumentNode();
 
+        /// <summary>
+        /// Processes the connected objects (inputs and outputs) of a given document object.
+        /// </summary>
+        /// <param name="obj">The document object to process.</param>
+        /// <param name="componentInstanceNode">The component instance node to update.</param>
         public void GetConnectedObjects(IGH_DocumentObject obj, ComponentInstanceNode componentInstanceNode)
         {
             // Check if the object is a parameter
             if (obj is IGH_Param param)
             {
-                // Get the sources (inputs)
+                // Process each source (input)
                 foreach (var source in param.Sources)
                 {
-                    // Process each source
                     ProcessInput(source, componentInstanceNode);
                 }
 
-                // Get the recipients (outputs)
+                // Process each recipient (output)
                 foreach (var recipient in param.Recipients)
                 {
-                    // Process each recipient
                     ProcessOutput(recipient, componentInstanceNode);
                 }
-
             }
             // Check if the object is a component
             else if (obj is IGH_Component component)
             {
-                // Get the inputs
+                // Process each input source
                 foreach (var input in component.Params.Input)
                 {
                     foreach (var source in input.Sources)
                     {
-                        // Process each source
                         ProcessInput(source, componentInstanceNode);
                     }
                 }
 
-                // Get the outputs
+                // Process each output recipient
                 foreach (var output in component.Params.Output)
                 {
                     foreach (var recipient in output.Recipients)
                     {
-                        // Process each recipient
                         ProcessOutput(recipient, componentInstanceNode);
                     }
                 }
@@ -68,44 +73,63 @@ namespace GraphHop.PluginRhino.Utilities
             }
         }
 
+        /// <summary>
+        /// Iterates through all document objects and processes them.
+        /// </summary>
+        /// <param name="ghDocument">The Grasshopper document to iterate through.</param>
         public void IterateDocumentObjects(GH_Document ghDocument)
         {
             try
             {
+                // Populate document properties
                 PopulateDocumentProperties(ghDocument);
-                // Iterate through all document objects and print their names
+
+                // Iterate through all document objects
                 foreach (IGH_DocumentObject obj in ghDocument.Objects)
                 {
-                    //check if object is a new component definition
+                    // Check if the object is a new component definition
                     if (ComponentDefinitionNodes.All(x => x.ComponentGuid != obj.ComponentGuid))
                     {
                         ComponentDefinitionNodes.Add(new ComponentDefinitionNode
                         {
                             ComponentGuid = obj.ComponentGuid,
                             Name = obj.Name,
-                            //ComponentCategory = obj.Category,
-                            //ComponentSubCategory = obj.SubCategory,
-                            //ComponentDescription = obj.Description
+                            // Uncomment and add additional properties if needed
+                            // ComponentCategory = obj.Category,
+                            // ComponentSubCategory = obj.SubCategory,
+                            // ComponentDescription = obj.Description
                         });
                     }
+
+                    // Populate properties of the document object
                     var componentInstanceNode = PopulateDocumentObjectProperties(obj);
+
+                    // Process connected objects
                     GetConnectedObjects(obj, componentInstanceNode);
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        /// <summary>
+        /// Populates the properties of the document node.
+        /// </summary>
+        /// <param name="ghDocument">The Grasshopper document to process.</param>
         public void PopulateDocumentProperties(GH_Document ghDocument)
         {
             DocumentNode.DocumentID = ghDocument.DocumentID;
-            //Update Version each time the struct object is instantiated
+            // Update version each time the struct object is instantiated
             DocumentVersionNode.VersionId = Guid.NewGuid();
         }
 
+        /// <summary>
+        /// Populates the properties of a document object and returns a component instance node.
+        /// </summary>
+        /// <param name="obj">The document object to process.</param>
+        /// <returns>The populated component instance node.</returns>
         public ComponentInstanceNode PopulateDocumentObjectProperties(IGH_DocumentObject obj)
         {
             ComponentInstanceNode componentInstanceNode = new ComponentInstanceNode
@@ -120,18 +144,27 @@ namespace GraphHop.PluginRhino.Utilities
             return componentInstanceNode;
         }
 
+        /// <summary>
+        /// Processes an input source and updates the component instance node.
+        /// </summary>
+        /// <param name="source">The input source to process.</param>
+        /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessInput(IGH_Param source, ComponentInstanceNode componentInstanceNode)
         {
             componentInstanceNode.Inputs.Add(new DataInputNode
             {
-                TargetGuid = source.Attributes?.GetTopLevel?.DocObject?.InstanceGuid??Guid.Empty,
+                TargetGuid = source.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
                 InstanceGuid = source.InstanceGuid,
                 NickName = source.NickName,
                 Name = source.GetType().Name
             });
-
         }
 
+        /// <summary>
+        /// Processes an output recipient and updates the component instance node.
+        /// </summary>
+        /// <param name="recipient">The output recipient to process.</param>
+        /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessOutput(IGH_Param recipient, ComponentInstanceNode componentInstanceNode)
         {
             componentInstanceNode.Outputs.Add(new DataOutputNode
