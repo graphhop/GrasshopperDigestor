@@ -105,16 +105,27 @@ public class GremlinGeneric : IGremlinGeneric
     {
         var nodeType = node.GetType();
         var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
-        var attType = typeof(IdAttribute);
-        var idField = fieldInfos.Where(field => field.IsDefined(attType, false)).FirstOrDefault();
+        var idAttributeType = typeof(IdAttribute);
+        var idField = fieldInfos.Where(field => field.IsDefined(idAttributeType, false)).FirstOrDefault();
         if (idField == null)
         {
             throw new Exception("No IdAttribute found on node");
         }
-
-        return start
+        var equalityAttributeType = typeof(IdAttribute);
+        var equalityFields = fieldInfos.Where(field => field.IsDefined(idAttributeType, false)).ToList();
+    
+        // get node by label and id
+        var traversal = start
             .HasLabel(nodeType.Name)
             .Has(idField.Name, idField.GetValue(node));
+
+        // filter by equality fields
+        foreach (var field in equalityFields)
+        {
+            traversal = traversal.Has(field.Name, field.GetValue(node));
+        }
+
+        return traversal;
     }
 
     public void Add(object node)
