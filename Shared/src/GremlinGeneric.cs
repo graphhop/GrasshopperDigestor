@@ -17,7 +17,7 @@ namespace GraphHop.Shared
         GraphTraversal<object, Vertex> FindAnonymous(object node);
         GraphTraversal<Vertex, Vertex> FindConnectedNodes(object node, int depth = 10);
 
-        void Connect(object node1, object node2);
+        bool Connect(object node1, object node2);
 
         bool Exists(object node);
 
@@ -38,14 +38,30 @@ namespace GraphHop.Shared
             return Find(node).HasNext();
         }
 
-        public void Connect(object node1, object node2)
+        public bool Connect(object node1, object node2)
         {
+            /*
             var n1 = Find(node1);
             var n2 = FindAnonymous(node2);
             var targetType = node2.GetType();
-
+            */
             var isThere = ConnectionExists(node1, node2);
 
+
+            var n1 = Find(node1);
+            if (!n1.HasNext())
+            {
+                return false;
+            }
+            var targetType = node2.GetType();
+            var result = n1.OutE(targetType.Name).InV();
+            if (!result.HasNext())
+            {
+                return false;
+            }
+            return Find(node2, result).HasNext();
+
+            /*
             if (n1.HasNext() && n1.HasNext())
             {
                 n1.AddE(targetType.Name).To(n2);
@@ -58,6 +74,7 @@ namespace GraphHop.Shared
             {
                 throw new Exception("Target node not found");
             }
+            */
             var isThereAfterAdd = ConnectionExists(node1, node2);
 
             var isThereAfterAddReverse = ConnectionExists(node2, node1);
