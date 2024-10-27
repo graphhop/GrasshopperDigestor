@@ -49,6 +49,9 @@
     <ProjectReference Include="..\SharedRhino\SharedRhino.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Gremlin.Net" />
+  </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />
   

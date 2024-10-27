@@ -30,9 +30,6 @@
   <ItemGroup>
     <PackageReference Include="Gremlin.Net" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageVersion Update="Gremlin.Net" Version="3.7.2" />
-  </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />
 
