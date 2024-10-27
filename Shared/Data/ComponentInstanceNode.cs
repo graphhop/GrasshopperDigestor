@@ -45,11 +45,10 @@ public struct ComponentInstanceNode
     /// List of Input Parameter
     /// 
     /// </summary>
-    public IList<Guid> Inputs;
-
+    public List<Guid> Inputs;
     // <summary>
     /// List of Output Parameter
     /// 
     /// </summary>
-    public IList<Guid> Outputs;
+    public List<Guid> Outputs;
 }

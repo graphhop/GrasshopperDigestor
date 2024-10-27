@@ -143,7 +143,9 @@ namespace GraphHop.PluginRhino.Utilities
                 ComponentGuid = obj.ComponentGuid,
                 NickName = obj.NickName,
                 X = obj.Attributes.Pivot.X,
-                Y = obj.Attributes.Pivot.Y
+                Y = obj.Attributes.Pivot.Y,
+                Inputs = new(),
+                Outputs = new()
             };
 
             ComponentInstanceNodes.Add(obj.InstanceGuid,componentInstanceNode);
@@ -164,7 +166,7 @@ namespace GraphHop.PluginRhino.Utilities
                 NickName = source.NickName,
                 Name = source.GetType().Name
             };
-            InputNodes.Add(inputNode.InstanceGuid, inputNode);
+            //InputNodes.Add(inputNode.InstanceGuid, inputNode);
             componentInstanceNode.Inputs.Add(inputNode.InstanceGuid);
         }
 
@@ -182,7 +184,7 @@ namespace GraphHop.PluginRhino.Utilities
                 NickName = recipient.NickName,
                 Name = recipient.GetType().Name
             };
-            OutputNodes.Add(outputNode.InstanceGuid, outputNode);
+            //OutputNodes.Add(outputNode.InstanceGuid, outputNode);
             componentInstanceNode.Outputs.Add(outputNode.InstanceGuid);
         }
     }
