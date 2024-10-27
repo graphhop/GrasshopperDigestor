@@ -13,10 +13,14 @@ namespace GraphHop.PluginRhino.Utilities
     public class GraphStrutObject
     {
         // List to store component definition nodes
-        public List<ComponentDefinitionNode> ComponentDefinitionNodes = new List<ComponentDefinitionNode>();
+        public Dictionary<Guid,ComponentDefinitionNode> ComponentDefinitionNodes = new();
 
         // List to store component instance nodes
-        public List<ComponentInstanceNode> ComponentInstanceNodes = new List<ComponentInstanceNode>();
+        public Dictionary<Guid,ComponentInstanceNode> ComponentInstanceNodes = new();
+
+        public Dictionary<Guid, DataInputNode> InputNodes = new();
+
+        public Dictionary<Guid, DataOutputNode> OutputNodes = new();
 
         // Node to store document version information
         public DocumentVersionNode DocumentVersionNode = new DocumentVersionNode();
@@ -40,9 +44,9 @@ namespace GraphHop.PluginRhino.Utilities
                 foreach (IGH_DocumentObject obj in ghDocument.Objects)
                 {
                     // Check if the object is a new component definition
-                    if (ComponentDefinitionNodes.All(x => x.ComponentGuid != obj.ComponentGuid))
+                    if (!ComponentDefinitionNodes.ContainsKey(obj.ComponentGuid))
                     {
-                        ComponentDefinitionNodes.Add(new ComponentDefinitionNode
+                        ComponentDefinitionNodes.Add(obj.ComponentGuid,new ComponentDefinitionNode
                         {
                             ComponentGuid = obj.ComponentGuid,
                             Name = obj.Name,
@@ -142,7 +146,7 @@ namespace GraphHop.PluginRhino.Utilities
                 Y = obj.Attributes.Pivot.Y
             };
 
-            ComponentInstanceNodes.Add(componentInstanceNode);
+            ComponentInstanceNodes.Add(obj.InstanceGuid,componentInstanceNode);
             return componentInstanceNode;
         }
 
@@ -153,13 +157,15 @@ namespace GraphHop.PluginRhino.Utilities
         /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessInput(IGH_Param source, ComponentInstanceNode componentInstanceNode)
         {
-            componentInstanceNode.Inputs.Add(new DataInputNode
+            var inputNode = new DataInputNode
             {
                 TargetGuid = source.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
                 InstanceGuid = source.InstanceGuid,
                 NickName = source.NickName,
                 Name = source.GetType().Name
-            });
+            };
+            InputNodes.Add(inputNode.InstanceGuid, inputNode);
+            componentInstanceNode.Inputs.Add(inputNode.InstanceGuid);
         }
 
         /// <summary>
@@ -169,13 +175,15 @@ namespace GraphHop.PluginRhino.Utilities
         /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessOutput(IGH_Param recipient, ComponentInstanceNode componentInstanceNode)
         {
-            componentInstanceNode.Outputs.Add(new DataOutputNode
+            var outputNode = new DataOutputNode
             {
                 TargetGuid = recipient.Attributes?.GetTopLevel?.DocObject?.InstanceGuid ?? Guid.Empty,
                 InstanceGuid = recipient.InstanceGuid,
                 NickName = recipient.NickName,
                 Name = recipient.GetType().Name
-            });
+            };
+            OutputNodes.Add(outputNode.InstanceGuid, outputNode);
+            componentInstanceNode.Outputs.Add(outputNode.InstanceGuid);
         }
     }
 }
