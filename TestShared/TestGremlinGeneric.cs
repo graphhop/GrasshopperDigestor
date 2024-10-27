@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using GraphHop.Shared;
 using GraphHop.Shared.Data;
+using GraphHop.SharedRhino.Data;
 using Gremlin.Net.Driver;
 using Gremlin.Net.Driver.Remote;
 using Gremlin.Net.Process.Traversal;
+using Gremlin.Net.Structure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PluginTemplate.Tests.Shared
@@ -78,6 +81,27 @@ namespace PluginTemplate.Tests.Shared
             Assert.IsTrue(_gremlin.Exists(nodeDef));
             Assert.IsTrue(_gremlin.Exists(nodeInstance));
             _gremlin.Connect(nodeDef, nodeInstance);
+        }
+
+        /// <summary>
+        /// Test method
+        /// Change signature to "async Task" in case of async tests
+        /// </summary>
+        [TestMethod]
+        public void Test_Add_node()
+
+        {
+            var nodeDef = new ComponentDefinitionNode()
+            {
+                ComponentGuid = Guid.NewGuid(),
+                Name = "test"
+            };
+
+            _gremlin.Add(nodeDef);
+            Assert.IsTrue(_gremlin.Exists(nodeDef));
+            var node = _gremlin.Find(nodeDef).ToList();
+            Assert.IsTrue(_gremlin.Exists(nodeDef));
+            Assert.Equals(node.Count(),2);
         }
 
         /// <summary>
