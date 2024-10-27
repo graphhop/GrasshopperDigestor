@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers.Text;
 using System.Collections.Generic;
 
 namespace GraphHop.Shared.Data;
@@ -37,6 +36,7 @@ public struct ComponentInstanceNode
     /// <summary>
     /// Icon
     /// </summary>
+    [Serialize]
     public string Icon;
 
     /// <summary>
