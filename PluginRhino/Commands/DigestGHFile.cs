@@ -76,6 +76,10 @@ namespace GraphHop.PluginRhino.Commands
 
             GraphStrutObject graphStrut = new GraphStrutObject();
             graphStrut.IterateDocumentObjects(ghDocument);
+            
+            PluginRhino.Gremlin.Add(graphStrut.DocumentNode);
+            PluginRhino.Gremlin.Add(graphStrut.DocumentVersionNode);
+            PluginRhino.Gremlin.Connect(graphStrut.DocumentNode,graphStrut.DocumentVersionNode);
 
             foreach (var defNode in graphStrut.ComponentDefinitionNodes.Values)
             {
@@ -96,6 +100,7 @@ namespace GraphHop.PluginRhino.Commands
                 PluginRhino.Gremlin.Add(instanceNode);
                 PluginRhino.Gremlin.Connect(instanceNode,
                     graphStrut.ComponentDefinitionNodes[instanceNode.ComponentGuid]);
+                PluginRhino.Gremlin.Connect(graphStrut.DocumentVersionNode, instanceNode);
                 foreach (var inputId in instanceNode.Inputs)
                 {
                     PluginRhino.Gremlin.Connect(graphStrut.InputNodes[inputId],
