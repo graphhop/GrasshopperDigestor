@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Xml;
 using GH_IO.Serialization;
 using static System.ConsoleColor;
 
@@ -12,6 +13,9 @@ public class GrasshopperParser
     {
         GH_Archive fileArchive = new();
         fileArchive.ReadFromFile(filePath);
+        var xmlRep = fileArchive.Serialize_Xml();
+        var doc = new XmlDocument();
+        doc.LoadXml(xmlRep);
         DisplayDocumentStatistics(fileArchive);
     }
     

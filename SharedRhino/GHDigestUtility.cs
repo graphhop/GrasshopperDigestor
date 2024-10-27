@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Grasshopper.Kernel;
 
-namespace GraphHop.PluginRhino.Utilities
+namespace GraphHop.SharedRhino
 {
     public static class GHDigestUtility
     {

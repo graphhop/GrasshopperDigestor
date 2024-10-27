@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GraphHop.Shared.src.Gremlin;
+using GraphHop.Shared;
 
 namespace GraphHop.Tests.Shared
 {
@@ -17,7 +17,7 @@ namespace GraphHop.Tests.Shared
         [TestMethod]
         public void TestGremlinInit()
         {
-            var gremlin = new GremlinConncetor();
+            var gremlin = new GremlinConnector();
 
             gremlin.AddTestObjects();
 
@@ -35,7 +35,7 @@ namespace GraphHop.Tests.Shared
             dummyData.Add("name", "test1");
             dummyData.Add("guid", new Guid());
 
-            var gremlin = new GremlinConncetor();
+            var gremlin = new GremlinConnector();
 
             gremlin.AddNode("TestNode2", dummyData);
 
