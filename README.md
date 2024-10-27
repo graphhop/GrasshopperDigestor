@@ -7,3 +7,8 @@ The main files of note are:
 * `DigestGHFile.cs` is the main script for digesting grasshopper scripts.
 * `Gremlin.cs` contains the `Gremlin` client.
 * Within `Shared` -> `Data`, we have our main graph operations and data definitions for graphs.
+
+## Data model of the graph database
+
+* [Textual description of the data model](data_model_description.pdf)
+* [Graphical representation of the data model](data_model_graphical_overview.pdf)
