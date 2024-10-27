@@ -2,32 +2,51 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using GraphHop.Shared.Data;
 using Grasshopper.Kernel;
-using static Grasshopper.Rhinoceros.Display.Params.Param_ModelView;
 
 namespace GraphHop.PluginRhino.Utilities
 {
+    /// <summary>
+    /// Represents a collection of various nodes related to a graph structure in Rhino.
+    /// </summary>
     public class GraphStrutObject
     {
         // List to store component definition nodes
+        /// <summary>
+        /// Represents a collection of component definition nodes stored in a dictionary.
+        /// Each node contains information about a specific component definition.
+        /// </summary>
         public Dictionary<Guid,ComponentDefinitionNode> ComponentDefinitionNodes = new();
 
         // List to store component instance nodes
+        /// <summary>
+        /// List to store component instance nodes.
+        /// </summary>
         public Dictionary<Guid,ComponentInstanceNode> ComponentInstanceNodes = new();
 
+        /// <summary>
+        /// Represents a collection of input nodes associated with a GraphStrutObject.
+        /// </summary>
         public Dictionary<Guid, DataInputNode> InputNodes = new();
 
+        /// <summary>
+        /// Represents a collection of output nodes in the GraphStrutObject.
+        /// Output nodes are used to store information about the output connections of components in the graph.
+        /// </summary>
         public Dictionary<Guid, DataOutputNode> OutputNodes = new();
 
         // Node to store document version information
+        /// <summary>
+        /// Node to store document version information.
+        /// </summary>
         public DocumentVersionNode DocumentVersionNode = new DocumentVersionNode();
 
         // Node to store document information
+        /// <summary>
+        /// Represents a node to store document information in the GraphHop system.
+        /// </summary>
         public DocumentNode DocumentNode = new DocumentNode();
 
 
@@ -194,7 +213,7 @@ namespace GraphHop.PluginRhino.Utilities
         /// <param name="componentInstanceNode">The component instance node to update.</param>
         private void ProcessOutput(IGH_Param recipient, ComponentInstanceNode componentInstanceNode)
         {
-            if(!OutputNodes.ContainsKey(recipient.InstanceGuid))
+            if (!OutputNodes.ContainsKey(recipient.InstanceGuid))
             {
                 var outputNode = new DataOutputNode
                 {
@@ -208,6 +227,11 @@ namespace GraphHop.PluginRhino.Utilities
             componentInstanceNode.Outputs.Add(recipient.InstanceGuid);
         }
 
+        /// <summary>
+        /// Converts a Bitmap image to a Base64 string.
+        /// </summary>
+        /// <param name="bitmap">The Bitmap image to convert.</param>
+        /// <returns>The Base64 string representation of the Bitmap image.</returns>
         private string ConvertBitmapToBase64(Bitmap bitmap)
         {
             using (MemoryStream memoryStream = new MemoryStream())
