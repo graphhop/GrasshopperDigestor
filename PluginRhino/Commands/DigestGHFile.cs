@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using GraphHop.PluginRhino.Utilities;
 using GraphHop.Shared.Data;
+using GraphHop.SharedRhino;
 using Grasshopper.Kernel;
 using Rhino;
 using Rhino.Commands;

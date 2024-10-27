@@ -19,4 +19,16 @@ public struct ComponentDefinitionNode
     /// </summary>
     [EqualityCheck]
     public string Name;
+    
+    /// <summary>
+    /// Icon
+    /// </summary>
+    [Serialize]
+    public string Icon;
+
+    /// <summary>
+    /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_InstanceDescription_Description.htm
+    /// </summary>
+    [Serialize]
+    public string Description;
 }

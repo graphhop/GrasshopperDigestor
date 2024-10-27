@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Drawing;
+using System.IO;
+using System.Xml;
+using GH_IO.Serialization;
 using GraphHop.Shared.Data;
 using Grasshopper.Kernel;
 
-namespace GraphHop.PluginRhino.Utilities
+namespace GraphHop.SharedRhino
 {
     /// <summary>
     /// Represents a collection of various nodes related to a graph structure in Rhino.
@@ -49,6 +51,37 @@ namespace GraphHop.PluginRhino.Utilities
         /// </summary>
         public DocumentNode DocumentNode = new DocumentNode();
 
+        private GH_DocumentIO _ioDoc;
+        private GH_Document _ghDoc;
+        private XmlDocument _xmlDoc;
+        private Guid _versionId;
+
+
+        public bool LoadDocument(string filePath, out string errmsg)
+        {
+            errmsg = "";   
+            // Load the Grasshopper document
+            var io = new GH_DocumentIO();
+            if (!io.Open(filePath))
+            {
+                errmsg="Failed to open the Grasshopper file.";
+                return false;
+            }
+            var ghDocument = io.Document;
+            if (ghDocument is null)
+            {
+                errmsg = "Failed to load the Grasshopper document.";
+                return false;
+            }
+            GH_Archive fileArchive = new();
+            fileArchive.ReadFromFile(filePath);
+            var xmlRep = fileArchive.Serialize_Xml();
+            
+            _xmlDoc = new XmlDocument();
+            _xmlDoc.LoadXml(xmlRep);
+            _versionId = Guid.NewGuid();
+            return true;
+        }
 
         /// <summary>
         /// Iterates through all document objects and processes them.
@@ -59,7 +92,7 @@ namespace GraphHop.PluginRhino.Utilities
             try
             {
                 // Populate document properties
-                PopulateDocumentProperties(ghDocument);
+                PopulateDocumentProperties();
 
                 // Iterate through all document objects
                 foreach (IGH_DocumentObject obj in ghDocument.Objects)
@@ -71,6 +104,9 @@ namespace GraphHop.PluginRhino.Utilities
                         {
                             ComponentGuid = obj.ComponentGuid,
                             Name = obj.Name,
+                            Description = obj.Description,
+                            Icon = ConvertBitmapToBase64(obj.Icon_24x24)
+                            
                             // Uncomment and add additional properties if needed
                             // ComponentCategory = obj.Category,
                             // ComponentSubCategory = obj.SubCategory,
@@ -144,14 +180,33 @@ namespace GraphHop.PluginRhino.Utilities
         /// Populates the properties of the document node.
         /// </summary>
         /// <param name="ghDocument">The Grasshopper document to process.</param>
-        public void PopulateDocumentProperties(GH_Document ghDocument)
+        public void PopulateDocumentProperties()
         {
-            DocumentNode.DocumentID = ghDocument.DocumentID;
-            // Update version each time the struct object is instantiated
-            DocumentVersionNode.VersionId = Guid.NewGuid();
-            DocumentNode.DisplayName = ghDocument.DisplayName;
-            DocumentNode.FilePath = ghDocument.FilePath;
-            DocumentNode.Owner = ghDocument?.Owner?.ToString() ?? "";
+            DocumentNode.DocumentID = _ghDoc.DocumentID;
+            DocumentNode.DisplayName = _ghDoc.DisplayName;
+            DocumentNode.FilePath = _ghDoc.FilePath;
+            DocumentNode.Owner = _ghDoc?.Owner?.ToString() ?? "";
+            var docHeader = _xmlDoc.SelectSingleNode($"//chunk[@name='DocumentHeader']");
+            if (docHeader is not null)
+            {
+                DocumentNode.DocumentHeadersXml = docHeader.OuterXml;
+            }
+            var defProps = _xmlDoc.SelectSingleNode($"//chunk[@name='DefinitionProperties']");
+            if (defProps is not null)
+            {
+                DocumentNode.DefinitionPropertiesXml = defProps.OuterXml;
+            }
+            var rcplay = _xmlDoc.SelectSingleNode($"//chunk[@name='RcpLayout']");
+            if (rcplay is not null)
+            {
+                DocumentNode.RcpLayoutXml = rcplay.OuterXml;
+            }
+            var libs = _xmlDoc.SelectSingleNode($"//chunk[@name='GHALibraries']");
+            if (libs is not null)
+            {
+                DocumentNode.GHALibrariesXml = libs.OuterXml;
+            }
+            
         }
 
         /// <summary>
@@ -163,18 +218,29 @@ namespace GraphHop.PluginRhino.Utilities
         {
             if (!ComponentInstanceNodes.TryGetValue(obj.InstanceGuid, out var componentInstanceNode))
             {
+                //go get the xml object from the xml document that corresponds to this object
+                string instanceGuidValue = obj.InstanceGuid.ToString();
+
+                // Select node
+                var chunkNode = _xmlDoc.SelectSingleNode($"//chunk[.//item[@name='InstanceGuid' and text()='{instanceGuidValue}']]");
+                var componentXml = "";
+                // Check if node was found
+                if (chunkNode is not null)
+                {
+                    // Get XML representation of the node
+                    componentXml = chunkNode.OuterXml;
+                }
+                
                 componentInstanceNode = new ComponentInstanceNode
                 {
                     InstanceGuid = obj.InstanceGuid,
                     ComponentGuid = obj.ComponentGuid,
                     NickName = obj.NickName,
-                    Name = obj.Name,
-                    Icon = ConvertBitmapToBase64(obj.Icon_24x24),
-                    Description = obj.Description,
                     X = obj.Attributes.Pivot.X,
                     Y = obj.Attributes.Pivot.Y,
                     Inputs = new(),
-                    Outputs = new()
+                    Outputs = new(),
+                    XmlRepresentation = componentXml
                 };
 
                 ComponentInstanceNodes.Add(obj.InstanceGuid,componentInstanceNode);

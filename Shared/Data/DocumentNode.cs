@@ -37,4 +37,13 @@ public struct DocumentNode
     /// </summary>
     [Serialize]
     public string Owner;
+    
+    [Serialize]
+    public string DocumentHeadersXml;
+    [Serialize]
+    public string DefinitionPropertiesXml;
+    [Serialize]
+    public string RcpLayoutXml;
+    [Serialize]
+    public string GHALibrariesXml;
 }
