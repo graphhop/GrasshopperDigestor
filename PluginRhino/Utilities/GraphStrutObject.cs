@@ -152,7 +152,6 @@ namespace GraphHop.PluginRhino.Utilities
             DocumentNode.DisplayName = ghDocument.DisplayName;
             DocumentNode.FilePath = ghDocument.FilePath;
             DocumentNode.Owner = ghDocument?.Owner?.ToString() ?? "";
-            DocumentNode.RuntimeID = ghDocument.RuntimeID;
         }
 
         /// <summary>
