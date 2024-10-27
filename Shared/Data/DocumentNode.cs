@@ -37,10 +37,4 @@ public struct DocumentNode
     /// </summary>
     [Serialize]
     public string Owner;
-
-    /// <summary>
-    /// The runtime ID of the document.
-    /// </summary>
-    [Serialize]
-    public ulong RuntimeID;
 }
