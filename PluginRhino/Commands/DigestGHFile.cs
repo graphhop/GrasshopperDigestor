@@ -47,7 +47,7 @@ namespace GraphHop.PluginRhino.Commands
 #endif
             var fileDialog = new Rhino.UI.OpenFileDialog
             {
-                Filter = "Grasshopper Files (*.gh)|*.gh",
+                Filter = "Grasshopper Files (*.gh;*.ghx)|*.gh;*.ghx",
                 Title = "Select a Grasshopper File"
             };
             if (!fileDialog.ShowOpenDialog())
