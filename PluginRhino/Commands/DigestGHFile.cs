@@ -75,6 +75,17 @@ namespace GraphHop.PluginRhino.Commands
             GraphStrutObject graphStrut = new GraphStrutObject();
             graphStrut.IterateDocumentObjects(ghDocument);
 
+            foreach (var defNode in graphStrut.ComponentDefinitionNodes)
+            {
+                PluginRhino.Gremlin.Add(defNode);
+            }
+
+            foreach (var instanceNode in graphStrut.ComponentInstanceNodes)
+            {
+                PluginRhino.Gremlin.Add(instanceNode);
+            }
+            
+
             return Result.Success;
 
         }
