@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 using GraphHop.Shared.Data;
 using Grasshopper.Kernel;
 using static Grasshopper.Rhinoceros.Display.Params.Param_ModelView;
@@ -128,6 +130,10 @@ namespace GraphHop.PluginRhino.Utilities
             DocumentNode.DocumentID = ghDocument.DocumentID;
             // Update version each time the struct object is instantiated
             DocumentVersionNode.VersionId = Guid.NewGuid();
+            DocumentNode.DisplayName = ghDocument.DisplayName;
+            DocumentNode.FilePath = ghDocument.FilePath;
+            DocumentNode.Owner = ghDocument.Owner.ToString();
+            DocumentNode.RuntimeID = ghDocument.RuntimeID;
         }
 
         /// <summary>
@@ -144,6 +150,9 @@ namespace GraphHop.PluginRhino.Utilities
                     InstanceGuid = obj.InstanceGuid,
                     ComponentGuid = obj.ComponentGuid,
                     NickName = obj.NickName,
+                    Name = obj.Name,
+                    Icon = ConvertBitmapToBase64(obj.Icon_24x24),
+                    Description = obj.Description,
                     X = obj.Attributes.Pivot.X,
                     Y = obj.Attributes.Pivot.Y,
                     Inputs = new(),
@@ -197,6 +206,21 @@ namespace GraphHop.PluginRhino.Utilities
                 OutputNodes.Add(outputNode.InstanceGuid, outputNode);
             }
             componentInstanceNode.Outputs.Add(recipient.InstanceGuid);
+        }
+
+        private string ConvertBitmapToBase64(Bitmap bitmap)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Save the bitmap to the memory stream in PNG format
+                bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+                // Convert the memory stream to a byte array
+                byte[] bitmapBytes = memoryStream.ToArray();
+
+                // Convert the byte array to a Base64 string
+                return Convert.ToBase64String(bitmapBytes);
+            }
         }
     }
 }

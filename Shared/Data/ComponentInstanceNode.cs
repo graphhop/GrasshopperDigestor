@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 
 namespace GraphHop.Shared.Data;
@@ -26,6 +27,23 @@ public struct ComponentInstanceNode
     /// </summary>
     [EqualityCheck]
     public string NickName;
+
+    /// <summary>
+    /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_InstanceDescription_Name.htm
+    /// </summary>
+    [Serialize]
+    public string Name;
+
+    /// <summary>
+    /// Icon
+    /// </summary>
+    public string Icon;
+
+    /// <summary>
+    /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_InstanceDescription_Description.htm
+    /// </summary>
+    [Serialize]
+    public string Description;
 
     /// <summary>
     /// Pivot point of the component instance, X-coordinate.

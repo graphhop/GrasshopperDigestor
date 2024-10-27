@@ -44,6 +44,12 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Update="System.Drawing.Common" Version="8.0.10" />
+  </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />
 

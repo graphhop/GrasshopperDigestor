@@ -14,4 +14,33 @@ public struct DocumentNode
     [EqualityCheck]
     public Guid DocumentID;
 
+    /// <summary>
+    /// The author of the document.
+    /// </summary>
+    [Serialize]
+    public string Author;
+
+    /// <summary>
+    /// The display name of the document.
+    /// </summary>
+    [Serialize]
+    public string DisplayName;
+
+    /// <summary>
+    /// The file path of the document.
+    /// </summary>
+    [Serialize]
+    public string FilePath;
+
+    /// <summary>
+    /// The owner of the document.
+    /// </summary>
+    [Serialize]
+    public string Owner;
+
+    /// <summary>
+    /// The runtime ID of the document.
+    /// </summary>
+    [Serialize]
+    public ulong RuntimeID;
 }
