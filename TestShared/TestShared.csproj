@@ -20,6 +20,26 @@
     <EnableDefaultEmbeddedResourceItems>true</EnableDefaultEmbeddedResourceItems>
     <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
   </PropertyGroup>
+  
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugR7|AnyCPU' ">
+    <OutputPath>bin\DebugR7\</OutputPath>
+  </PropertyGroup>
+  
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugR8|AnyCPU' ">
+    <OutputPath>bin\DebugR8\</OutputPath>
+  </PropertyGroup>
+  
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseR7|AnyCPU' ">
+    <OutputPath>bin\ReleaseR7\</OutputPath>
+  </PropertyGroup>
+  
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseR8|AnyCPU' ">
+    <OutputPath>bin\ReleaseR8\</OutputPath>
+  </PropertyGroup>
 
   <!--
     Embedded resources

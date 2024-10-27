@@ -4,6 +4,23 @@
     This file should be the final import used.
     It defines default values for AssemblyTitle and Description in case none have been set by the main project file.
   -->
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugR7|AnyCPU' ">
+    <OutputPath>$(MSBuildThisFileDirectory)bin\DebugR7\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugR8|AnyCPU' ">
+    <OutputPath>$(MSBuildThisFileDirectory)bin\DebugR8\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseR7|AnyCPU' ">
+    <OutputPath>$(MSBuildThisFileDirectory)bin\ReleaseR7\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseR8|AnyCPU' ">
+    <OutputPath>$(MSBuildThisFileDirectory)bin\ReleaseR8\</OutputPath>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <AssemblyTitle Condition=" '$(AssemblyTitle)' == '' ">$(AssemblyName)</AssemblyTitle>
     <Description Condition=" '$(Description)' == '' ">$(AssemblyName)</Description>
