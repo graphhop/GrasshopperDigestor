@@ -6,7 +6,7 @@ using Gremlin.Net.Driver.Remote;
 using Gremlin.Net.Process.Traversal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PluginTemplate.Tests.Shared
+namespace GraphHop.Tests.Shared
 {
     [TestClass]
     public class TestGremlinGeneric

@@ -58,24 +58,14 @@ namespace GraphHop.PluginRhino.Commands
                 RhinoApp.WriteLine("Invalid file path.");
                 return Result.Failure;
             }
-            // Load the Grasshopper document
-            var io = new GH_DocumentIO();
-            if (!io.Open(filePath))
-            {
-                RhinoApp.WriteLine("Failed to open the Grasshopper file.");
-                return Result.Failure;
-            }
-            var ghDocument = io.Document;
-            if (ghDocument == null)
+
+            GraphStrutObject graphStrut = new GraphStrutObject();
+            if (!graphStrut.LoadDocument(filePath, out var errmsg))
             {
                 RhinoApp.WriteLine("Failed to load the Grasshopper document.");
                 return Result.Failure;
             }
-
-            GHDigestUtility.IterateDocumentObjects(ghDocument);
-
-            GraphStrutObject graphStrut = new GraphStrutObject();
-            graphStrut.IterateDocumentObjects(ghDocument);
+            graphStrut.IterateDocumentObjects();
             
             PluginRhino.Gremlin.Add(graphStrut.DocumentNode);
             PluginRhino.Gremlin.Add(graphStrut.DocumentVersionNode);

@@ -61,14 +61,14 @@ namespace GraphHop.SharedRhino
         {
             errmsg = "";   
             // Load the Grasshopper document
-            var io = new GH_DocumentIO();
-            if (!io.Open(filePath))
+            _ioDoc = new GH_DocumentIO();
+            if (!_ioDoc.Open(filePath))
             {
                 errmsg="Failed to open the Grasshopper file.";
                 return false;
             }
-            var ghDocument = io.Document;
-            if (ghDocument is null)
+            _ghDoc = _ioDoc.Document;
+            if (_ghDoc is null)
             {
                 errmsg = "Failed to load the Grasshopper document.";
                 return false;
@@ -80,6 +80,7 @@ namespace GraphHop.SharedRhino
             _xmlDoc = new XmlDocument();
             _xmlDoc.LoadXml(xmlRep);
             _versionId = Guid.NewGuid();
+            DocumentVersionNode.VersionId = _versionId;
             return true;
         }
 
@@ -87,7 +88,7 @@ namespace GraphHop.SharedRhino
         /// Iterates through all document objects and processes them.
         /// </summary>
         /// <param name="ghDocument">The Grasshopper document to iterate through.</param>
-        public void IterateDocumentObjects(GH_Document ghDocument)
+        public void IterateDocumentObjects()
         {
             try
             {
@@ -95,7 +96,7 @@ namespace GraphHop.SharedRhino
                 PopulateDocumentProperties();
 
                 // Iterate through all document objects
-                foreach (IGH_DocumentObject obj in ghDocument.Objects)
+                foreach (IGH_DocumentObject obj in _ghDoc.Objects)
                 {
                     // Check if the object is a new component definition
                     if (!ComponentDefinitionNodes.ContainsKey(obj.ComponentGuid))
@@ -180,7 +181,7 @@ namespace GraphHop.SharedRhino
         /// Populates the properties of the document node.
         /// </summary>
         /// <param name="ghDocument">The Grasshopper document to process.</param>
-        public void PopulateDocumentProperties()
+        private void PopulateDocumentProperties()
         {
             DocumentNode.DocumentID = _ghDoc.DocumentID;
             DocumentNode.DisplayName = _ghDoc.DisplayName;
@@ -206,7 +207,6 @@ namespace GraphHop.SharedRhino
             {
                 DocumentNode.GHALibrariesXml = libs.OuterXml;
             }
-            
         }
 
         /// <summary>

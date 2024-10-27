@@ -18,6 +18,7 @@ public struct ComponentInstanceNode
     /// <summary>
     /// https://developer.rhino3d.com/api/grasshopper/html/P_Grasshopper_Kernel_GH_DocumentObject_ComponentGuid.htm
     /// </summary>
+    [IdAttribute]
     public Guid ComponentGuid;
 
     /// <summary>
