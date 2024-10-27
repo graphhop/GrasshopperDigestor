@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 using GraphHop.PluginRhino.Utilities;
+using GraphHop.Shared.Data;
 using Grasshopper.Kernel;
 using Rhino;
 using Rhino.Commands;
@@ -75,14 +77,44 @@ namespace GraphHop.PluginRhino.Commands
             GraphStrutObject graphStrut = new GraphStrutObject();
             graphStrut.IterateDocumentObjects(ghDocument);
 
-            foreach (var defNode in graphStrut.ComponentDefinitionNodes)
+            foreach (var defNode in graphStrut.ComponentDefinitionNodes.Values)
             {
                 PluginRhino.Gremlin.Add(defNode);
             }
-
-            foreach (var instanceNode in graphStrut.ComponentInstanceNodes)
+            
+            foreach (var inputNode in graphStrut.InputNodes.Values)
+            {
+                PluginRhino.Gremlin.Add(inputNode);
+            }
+            foreach (var outputNode in graphStrut.InputNodes.Values)
+            {
+                PluginRhino.Gremlin.Add(outputNode);
+            }
+            
+            foreach (var instanceNode in graphStrut.ComponentInstanceNodes.Values)
             {
                 PluginRhino.Gremlin.Add(instanceNode);
+                PluginRhino.Gremlin.Connect(instanceNode,
+                    graphStrut.ComponentDefinitionNodes[instanceNode.ComponentGuid]);
+                foreach (var inputId in instanceNode.Inputs)
+                {
+                    PluginRhino.Gremlin.Connect(graphStrut.InputNodes[inputId],
+                        instanceNode);
+                }
+
+                foreach (var outputId in instanceNode.Outputs)
+                {
+                    PluginRhino.Gremlin.Connect(instanceNode,
+                        graphStrut.OutputNodes[outputId]);
+                }
+            }
+            
+            foreach (var outputNode in graphStrut.OutputNodes.Values)
+            {
+                if (graphStrut.InputNodes.TryGetValue(outputNode.TargetGuid, out var inputNode))
+                {
+                    PluginRhino.Gremlin.Connect(outputNode,inputNode);
+                }
             }
             
 
