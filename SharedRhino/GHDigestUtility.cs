@@ -5,9 +5,32 @@ using Grasshopper.Kernel;
 
 namespace GraphHop.SharedRhino
 {
-    public static class GHDigestUtility
+    public class GHDigestUtility
     {
-        public static void GetConnectedObjects(IGH_DocumentObject obj)
+        private GH_DocumentIO _ioDoc;
+        private GH_Document _ghDoc;
+
+        public bool LoadDocument(string filePath, out string errmsg)
+        {
+            errmsg = "";
+            // Load the Grasshopper document
+            _ioDoc = new GH_DocumentIO();
+            if (!_ioDoc.Open(filePath))
+            {
+                errmsg = "Failed to open the Grasshopper file.";
+                return false;
+            }
+            _ghDoc = _ioDoc.Document;
+            if (_ghDoc is null)
+            {
+                errmsg = "Failed to load the Grasshopper document.";
+                return false;
+            }
+
+            return true;
+        }
+
+        public  void GetConnectedObjects(IGH_DocumentObject obj)
         {
             // Check if the object is a parameter
             if (obj is IGH_Param param)
@@ -57,14 +80,14 @@ namespace GraphHop.SharedRhino
             }
         }
 
-        public static void IterateDocumentObjects(GH_Document ghDocument)
+        public  void IterateDocumentObjects()
         {
             try
             {
                 System.Diagnostics.Debug.WriteLine("");
-                PrintDocumentProperties(ghDocument);
+                PrintDocumentProperties(_ghDoc);
                 // Iterate through all document objects and print their names
-                foreach (IGH_DocumentObject obj in ghDocument.Objects)
+                foreach (IGH_DocumentObject obj in _ghDoc.Objects)
                 {
                     Debug.WriteLine("");
                     PrintDocumentObjectProperties(obj);
@@ -80,7 +103,7 @@ namespace GraphHop.SharedRhino
             }
         }
 
-        public static void PrintDocumentProperties(GH_Document ghDocument)
+        public  void PrintDocumentProperties(GH_Document ghDocument)
         {
             Debug.WriteLine($"Author: {ghDocument.Author}");
             Debug.WriteLine($"DisplayName: {ghDocument.DisplayName ?? "None"}");
@@ -91,7 +114,7 @@ namespace GraphHop.SharedRhino
             Debug.WriteLine($"SolutionState: {ghDocument.SolutionState}");
         }
 
-        public static void PrintDocumentObjectProperties(IGH_DocumentObject obj)
+        public  void PrintDocumentObjectProperties(IGH_DocumentObject obj)
         {
             Debug.WriteLine("----------Component Metadata---------");
             //Debug.WriteLine($"Attributes: {obj.Attributes}");
@@ -111,12 +134,12 @@ namespace GraphHop.SharedRhino
             Debug.WriteLine($"SubCategory: {obj.SubCategory ?? "None"}");
         }
 
-        private static string JoinKeywords(IEnumerable<string> keywords)
+        private  string JoinKeywords(IEnumerable<string> keywords)
         {
             return keywords != null ? string.Join(", ", keywords) : "None";
         }
 
-        private static void ProcessSource(IGH_Param source)
+        private  void ProcessSource(IGH_Param source)
         {
             // Example processing logic for sources
             string parentComponentName = source.Attributes?.GetTopLevel?.DocObject?.Name ?? "Unknown";
@@ -124,7 +147,7 @@ namespace GraphHop.SharedRhino
             // Add additional processing logic here
         }
 
-        private static void ProcessRecipient(IGH_Param recipient)
+        private  void ProcessRecipient(IGH_Param recipient)
         {
             // Example processing logic for recipients
             string parentComponentName = recipient.Attributes?.GetTopLevel?.DocObject?.Name ?? "Unknown";
