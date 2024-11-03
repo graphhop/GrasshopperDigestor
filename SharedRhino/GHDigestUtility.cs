@@ -71,6 +71,31 @@ namespace GraphHop.SharedRhino
             }
         }
 
+        public string ParseGHFileNoPrint()
+        {
+            try
+            {
+                _outPutList.Append(new String(""));
+                _outPutList.Append(new String(newFileSeperator));
+                PrintDocumentProperties(_ghDoc);
+                // Iterate through all document objects and print their names
+                foreach (IGH_DocumentObject obj in _ghDoc.Objects)
+                {
+                    _outPutList.Append(new String(""));
+                    PrintDocumentObjectProperties(obj);
+                    _outPutList.Append(new String(newInputOutputSeperator));
+                    GetConnectedObjects(obj);
+                }
+                //parse output list to one single string
+                return string.Join(Environment.NewLine, _outPutList);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public void GetConnectedObjects(IGH_DocumentObject obj)
         {
             // Check if the object is a parameter
