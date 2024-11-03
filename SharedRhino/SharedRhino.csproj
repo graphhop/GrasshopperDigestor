@@ -30,6 +30,7 @@
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="OpenAI" />
     <PackageReference Include="System.Drawing.Common" />
     <PackageReference Include="Gremlin.Net" />
   </ItemGroup>

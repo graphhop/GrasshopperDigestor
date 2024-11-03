@@ -3,6 +3,9 @@ using Grasshopper.Kernel;
 using GraphHop.SharedRhino;
 using Rhino;
 using Rhino.Commands;
+using OpenAI.Chat;
+using System;
+using System.Diagnostics;
 
 namespace GraphHop.PluginRhino.Commands
 {
@@ -72,7 +75,18 @@ namespace GraphHop.PluginRhino.Commands
                 RhinoApp.WriteLine("Failed to load the Grasshopper document.");
                 return Result.Failure;
             }
-            gHDigestUtility.IterateDocumentObjects();
+            gHDigestUtility.ParseGHToConsole();
+
+            Debug.WriteLine("----------------------------------");
+
+            //need to store key inside environment variable as OPENAI_API_KEY andrestart VisualStudio
+
+            ChatClient client = new(model: "gpt-4o", apiKey: Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
+
+            ChatCompletion completion = client.CompleteChat("Say 'this is a test.'");
+
+            Debug.WriteLine($"[ASSISTANT]: {completion.Content[0].Text}");
+
             return Result.Success;
         }
     }

@@ -30,7 +30,7 @@ namespace GraphHop.SharedRhino
             return true;
         }
 
-        public void IterateDocumentObjects()
+        public void ParseGHToConsole()
         {
             try
             {
