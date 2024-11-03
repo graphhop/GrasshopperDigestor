@@ -19,7 +19,7 @@ namespace GraphHop.PluginRhino.Commands
         public static DigestGHFileLocal Instance { get; private set; }
 
         ///<returns>The command name as it appears on the Rhino command line.</returns>
-        public override string EnglishName => "PluginTemplateExampleCommand";
+        public override string EnglishName => "DigestGHFileLocal";
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {

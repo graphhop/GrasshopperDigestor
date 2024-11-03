@@ -30,6 +30,29 @@ namespace GraphHop.SharedRhino
             return true;
         }
 
+        public void IterateDocumentObjects()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("");
+                Debug.WriteLine("----------Parsing New GH Document---------");
+                PrintDocumentProperties(_ghDoc);
+                // Iterate through all document objects and print their names
+                foreach (IGH_DocumentObject obj in _ghDoc.Objects)
+                {
+                    Debug.WriteLine("");
+                    PrintDocumentObjectProperties(obj);
+                    Debug.WriteLine("----------Input&Outputs---------");
+                    GetConnectedObjects(obj);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public  void GetConnectedObjects(IGH_DocumentObject obj)
         {
             // Check if the object is a parameter
@@ -80,29 +103,6 @@ namespace GraphHop.SharedRhino
             }
         }
 
-        public  void IterateDocumentObjects()
-        {
-            try
-            {
-                System.Diagnostics.Debug.WriteLine("");
-                PrintDocumentProperties(_ghDoc);
-                // Iterate through all document objects and print their names
-                foreach (IGH_DocumentObject obj in _ghDoc.Objects)
-                {
-                    Debug.WriteLine("");
-                    PrintDocumentObjectProperties(obj);
-                    Debug.WriteLine($"Object Name: {obj.Name}, NickName:  {obj.NickName} ");
-                    Debug.WriteLine("----------Input&Outputs---------");
-                    GetConnectedObjects(obj);
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
         public  void PrintDocumentProperties(GH_Document ghDocument)
         {
             Debug.WriteLine($"Author: {ghDocument.Author}");
@@ -122,16 +122,16 @@ namespace GraphHop.SharedRhino
             Debug.WriteLine($"ComponentGuid: {obj.ComponentGuid}");
             Debug.WriteLine($"Description: {obj.Description ?? "None"}");
             Debug.WriteLine($"Exposure: {obj.Exposure}");
-            Debug.WriteLine($"HasCategory: {obj.HasCategory}");
-            Debug.WriteLine($"HasSubCategory: {obj.HasSubCategory}");
-            Debug.WriteLine($"IconDisplayMode: {obj.IconDisplayMode}");
+            //Debug.WriteLine($"HasCategory: {obj.HasCategory}");
+            //Debug.WriteLine($"HasSubCategory: {obj.HasSubCategory}");
+            //Debug.WriteLine($"IconDisplayMode: {obj.IconDisplayMode}");
             Debug.WriteLine($"InstanceDescription: {obj.InstanceDescription ?? "None"}");
             Debug.WriteLine($"InstanceGuid: {obj.InstanceGuid}");
             Debug.WriteLine($"Keywords: {JoinKeywords(obj.Keywords)}");
             Debug.WriteLine($"Name: {obj.Name ?? "None"}");
             Debug.WriteLine($"NickName: {obj.NickName ?? "None"}");
             Debug.WriteLine($"Obsolete: {obj.Obsolete}");
-            Debug.WriteLine($"SubCategory: {obj.SubCategory ?? "None"}");
+            //Debug.WriteLine($"SubCategory: {obj.SubCategory ?? "None"}");
         }
 
         private  string JoinKeywords(IEnumerable<string> keywords)

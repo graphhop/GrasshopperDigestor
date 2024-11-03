@@ -2,6 +2,7 @@
 using Gremlin.Net.Driver;
 using Gremlin.Net.Driver.Remote;
 using Gremlin.Net.Process.Traversal;
+using Rhino;
 using Rhino.PlugIns;
 
 namespace GraphHop.PluginRhino
@@ -27,14 +28,23 @@ namespace GraphHop.PluginRhino
         
         protected override LoadReturnCode OnLoad(ref string errorMessage)
         {
-            var endpoint = "127.0.0.1";
-            // This uses the default Neptune and Gremlin port, 8182
-            var gremlinServer = new GremlinServer(endpoint, 8182, enableSsl: false);
-            var gremlinClient = new GremlinClient(gremlinServer);
-            var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
-            var gremlin = AnonymousTraversalSource.Traversal().WithRemote(remoteConnection);
-            Gremlin = new GremlinGeneric(gremlin);
-            
+            try
+            {
+                var endpoint = "127.0.0.1";
+                // This uses the default Neptune and Gremlin port, 8182
+                var gremlinServer = new GremlinServer(endpoint, 8182, enableSsl: false);
+                var gremlinClient = new GremlinClient(gremlinServer);
+                var remoteConnection = new DriverRemoteConnection(gremlinClient, "g");
+                var gremlin = AnonymousTraversalSource.Traversal().WithRemote(remoteConnection);
+                Gremlin = new GremlinGeneric(gremlin);
+
+            }
+            catch (System.Exception ex)
+            {
+                RhinoApp.WriteLine("Failed to load GremlinServer, Local command will still be available");
+                errorMessage = "Failed to load GremlinServer: " + ex.Message;
+            }
+
             return base.OnLoad(ref errorMessage);
         }
 
