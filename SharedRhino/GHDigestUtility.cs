@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Grasshopper.Kernel;
 
 namespace GraphHop.SharedRhino
@@ -9,6 +10,16 @@ namespace GraphHop.SharedRhino
     {
         private GH_DocumentIO _ioDoc;
         private GH_Document _ghDoc;
+        private List<string> _outPutList;
+
+        //seperator
+        public string newFileSeperator = "----------New GH File---------";
+        public string newComponentSeperator = "----------New Component---------";
+        public string newInputOutputSeperator = "----------Input&Outputs---------";
+        public GHDigestUtility()
+        {
+            _outPutList = new List<string>();
+        }
 
         public bool LoadDocument(string filePath, out string errmsg)
         {
@@ -30,21 +41,28 @@ namespace GraphHop.SharedRhino
             return true;
         }
 
-        public void ParseGHToConsole()
+        public string ParseGHToConsole()
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("");
-                Debug.WriteLine("----------Parsing New GH Document---------");
+                _outPutList.Append(new String(""));
+                _outPutList.Append(new String(newFileSeperator));
                 PrintDocumentProperties(_ghDoc);
                 // Iterate through all document objects and print their names
                 foreach (IGH_DocumentObject obj in _ghDoc.Objects)
                 {
-                    Debug.WriteLine("");
+                    _outPutList.Append(new String(""));
                     PrintDocumentObjectProperties(obj);
-                    Debug.WriteLine("----------Input&Outputs---------");
+                    _outPutList.Append(new String(newInputOutputSeperator));
                     GetConnectedObjects(obj);
                 }
+
+                foreach (var line in _outPutList)
+                {
+                    Debug.WriteLine(line);
+                }
+                //parse output list to one single string
+                return string.Join(Environment.NewLine, _outPutList);
             }
             catch (Exception)
             {
@@ -53,7 +71,7 @@ namespace GraphHop.SharedRhino
             }
         }
 
-        public  void GetConnectedObjects(IGH_DocumentObject obj)
+        public void GetConnectedObjects(IGH_DocumentObject obj)
         {
             // Check if the object is a parameter
             if (obj is IGH_Param param)
@@ -99,39 +117,39 @@ namespace GraphHop.SharedRhino
             }
             else
             {
-                Debug.WriteLine("The object is neither a parameter nor a component.");
+                _outPutList.Add("The object is neither a parameter nor a component.");
             }
         }
 
-        public  void PrintDocumentProperties(GH_Document ghDocument)
+        public void PrintDocumentProperties(GH_Document ghDocument)
         {
-            Debug.WriteLine($"Author: {ghDocument.Author}");
-            Debug.WriteLine($"DisplayName: {ghDocument.DisplayName ?? "None"}");
-            Debug.WriteLine($"DocumentID: {ghDocument.DocumentID}");
-            Debug.WriteLine($"FilePath: {ghDocument.FilePath ?? "None"}");
-            Debug.WriteLine($"Owner: {ghDocument.Owner}");
-            Debug.WriteLine($"RuntimeID: {ghDocument.RuntimeID}");
-            Debug.WriteLine($"SolutionState: {ghDocument.SolutionState}");
+            _outPutList.Add($"Author: {ghDocument.Author}");
+            _outPutList.Add($"DisplayName: {ghDocument.DisplayName ?? "None"}");
+            _outPutList.Add($"DocumentID: {ghDocument.DocumentID}");
+            _outPutList.Add($"FilePath: {ghDocument.FilePath ?? "None"}");
+            _outPutList.Add($"Owner: {ghDocument.Owner}");
+            _outPutList.Add($"RuntimeID: {ghDocument.RuntimeID}");
+            _outPutList.Add($"SolutionState: {ghDocument.SolutionState}");
         }
 
-        public  void PrintDocumentObjectProperties(IGH_DocumentObject obj)
+        public void PrintDocumentObjectProperties(IGH_DocumentObject obj)
         {
-            Debug.WriteLine("----------Component Metadata---------");
-            //Debug.WriteLine($"Attributes: {obj.Attributes}");
-            Debug.WriteLine($"Category: {obj.Category ?? "None"}");
-            Debug.WriteLine($"ComponentGuid: {obj.ComponentGuid}");
-            Debug.WriteLine($"Description: {obj.Description ?? "None"}");
-            Debug.WriteLine($"Exposure: {obj.Exposure}");
-            //Debug.WriteLine($"HasCategory: {obj.HasCategory}");
-            //Debug.WriteLine($"HasSubCategory: {obj.HasSubCategory}");
-            //Debug.WriteLine($"IconDisplayMode: {obj.IconDisplayMode}");
-            Debug.WriteLine($"InstanceDescription: {obj.InstanceDescription ?? "None"}");
-            Debug.WriteLine($"InstanceGuid: {obj.InstanceGuid}");
-            Debug.WriteLine($"Keywords: {JoinKeywords(obj.Keywords)}");
-            Debug.WriteLine($"Name: {obj.Name ?? "None"}");
-            Debug.WriteLine($"NickName: {obj.NickName ?? "None"}");
-            Debug.WriteLine($"Obsolete: {obj.Obsolete}");
-            //Debug.WriteLine($"SubCategory: {obj.SubCategory ?? "None"}");
+            _outPutList.Add(newComponentSeperator);
+            //_outPutList.Add($"Attributes: {obj.Attributes}");
+            _outPutList.Add($"Category: {obj.Category ?? "None"}");
+            _outPutList.Add($"ComponentGuid: {obj.ComponentGuid}");
+            _outPutList.Add($"Description: {obj.Description ?? "None"}");
+            _outPutList.Add($"Exposure: {obj.Exposure}");
+            //_outPutList.Add($"HasCategory: {obj.HasCategory}");
+            //_outPutList.Add($"HasSubCategory: {obj.HasSubCategory}");
+            //_outPutList.Add($"IconDisplayMode: {obj.IconDisplayMode}");
+            _outPutList.Add($"InstanceDescription: {obj.InstanceDescription ?? "None"}");
+            _outPutList.Add($"InstanceGuid: {obj.InstanceGuid}");
+            _outPutList.Add($"Keywords: {JoinKeywords(obj.Keywords)}");
+            _outPutList.Add($"Name: {obj.Name ?? "None"}");
+            _outPutList.Add($"NickName: {obj.NickName ?? "None"}");
+            _outPutList.Add($"Obsolete: {obj.Obsolete}");
+            //_outPutList.Add($"SubCategory: {obj.SubCategory ?? "None"}");
         }
 
         private  string JoinKeywords(IEnumerable<string> keywords)
@@ -139,19 +157,19 @@ namespace GraphHop.SharedRhino
             return keywords != null ? string.Join(", ", keywords) : "None";
         }
 
-        private  void ProcessSource(IGH_Param source)
+        private void ProcessSource(IGH_Param source)
         {
             // Example processing logic for sources
             string parentComponentName = source.Attributes?.GetTopLevel?.DocObject?.Name ?? "Unknown";
-            Debug.WriteLine($"Input Type: {source.GetType().Name}, NickName: {source.NickName}, Parent Component: {parentComponentName}");
+            _outPutList.Add($"Input Type: {source.GetType().Name}, NickName: {source.NickName}, Parent Component: {parentComponentName}");
             // Add additional processing logic here
         }
 
-        private  void ProcessRecipient(IGH_Param recipient)
+        private void ProcessRecipient(IGH_Param recipient)
         {
             // Example processing logic for recipients
             string parentComponentName = recipient.Attributes?.GetTopLevel?.DocObject?.Name ?? "Unknown";
-            Debug.WriteLine($"Output Type: {recipient.GetType().Name}, NickName: {recipient.NickName}, Parent Component: {parentComponentName}");
+            _outPutList.Add($"Output Type: {recipient.GetType().Name}, NickName: {recipient.NickName}, Parent Component: {parentComponentName}");
             // Add additional processing logic here
         }
     }

@@ -29,10 +29,16 @@
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Resources\Example01_RetrievalAugmentedGeneration.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Gremlin.Net" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Shared.csproj.DotSettings" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Example01_RetrievalAugmentedGeneration.cs" />
   </ItemGroup>
   
   <Import Project="../CommonSettingsFinal.csproj" />

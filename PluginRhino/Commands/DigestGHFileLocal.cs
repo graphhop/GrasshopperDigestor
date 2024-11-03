@@ -75,7 +75,8 @@ namespace GraphHop.PluginRhino.Commands
                 RhinoApp.WriteLine("Failed to load the Grasshopper document.");
                 return Result.Failure;
             }
-            gHDigestUtility.ParseGHToConsole();
+            
+            string ParsedGHString = gHDigestUtility.ParseGHToConsole();
 
             Debug.WriteLine("----------------------------------");
 
