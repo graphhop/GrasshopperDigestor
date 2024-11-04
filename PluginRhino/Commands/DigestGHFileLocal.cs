@@ -11,10 +11,11 @@ using System.Diagnostics;
 using System.Threading;
 using OpenAI;
 using System.ClientModel;
+using Eto.Forms;
 
 namespace GraphHop.PluginRhino.Commands
 {
-    public class DigestGHFileLocal : Command
+    public class DigestGHFileLocal : Rhino.Commands.Command
     {
         public DigestGHFileLocal()
         {
@@ -93,9 +94,12 @@ namespace GraphHop.PluginRhino.Commands
                 return Result.Failure;
             }
 
+
             // Create the OpenAI client
             // Assistants is a beta API and subject to change; acknowledge its experimental status by suppressing the matching warning.
 #pragma warning disable OPENAI001
+
+
             OpenAIClient openAIClient = new(apiKey);
             OpenAIFileClient fileClient = openAIClient.GetOpenAIFileClient();
             AssistantClient assistantClient = openAIClient.GetAssistantClient();
@@ -147,18 +151,20 @@ namespace GraphHop.PluginRhino.Commands
             // Print out the full history for the thread that includes the augmented generation
             CollectionResult<ThreadMessage> messages = assistantClient.GetMessages(threadRun.ThreadId, new MessageCollectionOptions() { Order = MessageCollectionOrder.Ascending });
 
+            string messageContent = "";
+            string imagePath = null;
             foreach (ThreadMessage message in messages)
             {
-                Debug.Write($"[{message.Role.ToString().ToUpper()}]: ");
+                messageContent += $"[{message.Role.ToString().ToUpper()}]: ";
                 foreach (MessageContent contentItem in message.Content)
                 {
                     if (!string.IsNullOrEmpty(contentItem.Text))
                     {
-                        Debug.WriteLine($"{contentItem.Text}");
+                        messageContent += $"{contentItem.Text}\n";
 
                         if (contentItem.TextAnnotations.Count > 0)
                         {
-                            Debug.WriteLine("");
+                            messageContent += "\n";
                         }
 
                         // Include annotations, if any.
@@ -166,11 +172,11 @@ namespace GraphHop.PluginRhino.Commands
                         {
                             if (!string.IsNullOrEmpty(annotation.InputFileId))
                             {
-                                Debug.WriteLine($"* File citation, file ID: {annotation.InputFileId}");
+                                messageContent += $"* File citation, file ID: {annotation.InputFileId}\n";
                             }
                             if (!string.IsNullOrEmpty(annotation.OutputFileId))
                             {
-                                Debug.WriteLine($"* File output, new file ID: {annotation.OutputFileId}");
+                                messageContent += $"* File output, new file ID: {annotation.OutputFileId}\n";
                             }
                         }
                     }
@@ -178,14 +184,23 @@ namespace GraphHop.PluginRhino.Commands
                     {
                         OpenAIFile imageInfo = fileClient.GetFile(contentItem.ImageFileId);
                         BinaryData imageBytes = fileClient.DownloadFile(contentItem.ImageFileId);
-                        using FileStream stream = File.OpenWrite($"{imageInfo.Filename}.png");
+                        string imageDirectory = Path.GetTempPath();
+                        imagePath = Path.Combine(imageDirectory, $"{imageInfo.Filename}.png");
+
+                        imagePath = null;
+
+                        using FileStream stream = File.OpenWrite(imagePath);
                         imageBytes.ToStream().CopyTo(stream);
 
-                        Debug.WriteLine($"<image: {imageInfo.Filename}.png>");
+                        messageContent += $"<image: {imageInfo.Filename}.png>\n";
                     }
                 }
-                Debug.WriteLine("");
+                messageContent += "\n";
             }
+
+            // Show the message content in an Eto.Forms dialog
+            var messageDialog = new MessageDialog(messageContent, imagePath);
+            messageDialog.ShowModal();
 
             // Optionally, delete any persistent resources you no longer need.
             _ = assistantClient.DeleteThread(threadRun.ThreadId);
