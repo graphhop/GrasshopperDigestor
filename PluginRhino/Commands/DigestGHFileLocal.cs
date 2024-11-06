@@ -35,8 +35,8 @@ namespace GraphHop.PluginRhino.Commands
 
             /// The RHINOCOMMON_* constants are defined in "CommonReferencesRhino.csproj"
 #if RHINOCOMMON_EQUAL_7
-                    RhinoApp.WriteLine("RHINOCOMMON_EQUAL_7 is defined.");
-                    return Result.Failure;
+                RhinoApp.WriteLine("RHINOCOMMON_EQUAL_7 is defined.");
+                return Result.Failure;
 #endif
 
 #if RHINOCOMMON_EQUAL_8
@@ -53,8 +53,8 @@ namespace GraphHop.PluginRhino.Commands
 
             /// see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/preprocessor-directives
 #if NETFRAMEWORK
-                    RhinoApp.WriteLine("NETFRAMEWORK is defined.");
-                    return Result.Failure;
+                RhinoApp.WriteLine("NETFRAMEWORK is defined.");
+                return Result.Failure;
 #endif
 
 #if NET7_0_OR_GREATER
@@ -111,18 +111,18 @@ namespace GraphHop.PluginRhino.Commands
                 Instructions = "You are an assistant that helps answer questions about a Grasshopper file. " +
                 "When asked to generate a graph, chart, or other visualization, use the code interpreter tool to do so.",
                 Tools =
-                        {
-                            new FileSearchToolDefinition(),
-                            new CodeInterpreterToolDefinition(),
-                        },
+                            {
+                                new FileSearchToolDefinition(),
+                                new CodeInterpreterToolDefinition(),
+                            },
                 ToolResources = new()
                 {
                     FileSearch = new()
                     {
                         NewVectorStores =
-                                {
-                                    new VectorStoreCreationHelper(new[] { ghFile.Id }),
-                                }
+                                    {
+                                        new VectorStoreCreationHelper(new[] { ghFile.Id }),
+                                    }
                     }
                 },
             };
@@ -132,7 +132,9 @@ namespace GraphHop.PluginRhino.Commands
             // Create a thread with a user query about the data
             ThreadCreationOptions threadOptions = new()
             {
-                InitialMessages = { "Please summarize the purpose and function of Grasshopper file. and draw a diagram representing the rough workflow" }
+                InitialMessages = { "Please summarize the purpose and function of Grasshopper file. " +
+                    "Draw a diagram representing the rough workflow of the script, the logic should flow from left to right like mimicing the look of a grasshopper script" +
+                    "each component should be acompanied with a short description of what" }
             };
 
             ThreadRun threadRun = assistantClient.CreateThreadAndRun(assistant.Id, threadOptions);
@@ -176,12 +178,7 @@ namespace GraphHop.PluginRhino.Commands
                     }
                     if (!string.IsNullOrEmpty(contentItem.ImageFileId))
                     {
-                        OpenAIFile imageInfo = fileClient.GetFile(contentItem.ImageFileId);
-                        BinaryData imageBytes = fileClient.DownloadFile(contentItem.ImageFileId);
-                        using FileStream stream = File.OpenWrite($"{imageInfo.Filename}.png");
-                        imageBytes.ToStream().CopyTo(stream);
-
-                        Debug.WriteLine($"<image: {imageInfo.Filename}.png>");
+                        ChatGPTUtility.SaveAndOpenImage(fileClient, contentItem.ImageFileId);
                     }
                 }
                 Debug.WriteLine("");
