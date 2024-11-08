@@ -187,10 +187,10 @@ namespace GraphHop.PluginRhino.Commands
                         string imageDirectory = Path.GetTempPath();
                         imagePath = Path.Combine(imageDirectory, $"{imageInfo.Filename}.png");
 
-                        imagePath = null;
 
                         using FileStream stream = File.OpenWrite(imagePath);
                         imageBytes.ToStream().CopyTo(stream);
+                        imagePath = null;
 
                         messageContent += $"<image: {imageInfo.Filename}.png>\n";
                     }
